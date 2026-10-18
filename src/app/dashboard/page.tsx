@@ -1,0 +1,4 @@
+import {redirect} from 'next/navigation';
+import {serverSupabase} from '@/lib/supabase/server';
+import {NewInterview} from '@/components/NewInterview';
+export default async function Dashboard(){const db=await serverSupabase();const {data:{user}}=await db.auth.getUser();if(!user)redirect('/login');const {data,error}=await db.from('interviews').select('id,company_name,role_title,interview_stage,interview_at').order('created_at',{ascending:false}).limit(100);return <main><h1>Your interviews</h1><p>Signed in as {user.email}</p><NewInterview/><h2>Saved interview workspaces</h2>{error&&<p role="alert">{error.message}</p>}{!data?.length&&<p>No interviews yet.</p>}{data?.map(x=><article key={x.id} style={{border:'1px solid #ddd',padding:14,margin:'10px 0'}}><strong>{x.company_name} — {x.role_title}</strong><p>{x.interview_stage} · {x.interview_at||'Not scheduled'}</p></article>)}<form action="/api/auth/signout" method="post"><button>Sign out</button></form></main>}
