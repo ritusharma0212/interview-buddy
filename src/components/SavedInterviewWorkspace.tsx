@@ -16,9 +16,7 @@ function InterviewDate({timestamp}:{timestamp:string|null}){
   }).format(date));
  },[timestamp]);
  if(!timestamp)return <span>Not scheduled</span>;
- return <span><time dateTime={timestamp}>{formatted??timestamp}</time>
-  {formatted&&<span style={{display:'block',fontSize:12,color:'#475467',overflowWrap:'anywhere'}}>Original timestamp: {timestamp}</span>}
- </span>;
+ return <span><time dateTime={timestamp}>{formatted??timestamp}</time></span>;
 }
 
 export function SavedInterviewWorkspace({interview}:{interview:Interview}){
