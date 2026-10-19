@@ -70,12 +70,10 @@ export function VoicePractice({value,onChange}:{value:string;onChange:(text:stri
  function clear(){recognition.current?.abort();recognition.current=null;setListening(false);onChange('');setInterim('');finalText.current='';setSeconds(0);setError('')}
  const time=`${Math.floor(seconds/60).toString().padStart(2,'0')}:${(seconds%60).toString().padStart(2,'0')}`;
  return <div style={{margin:'12px 0',padding:12,border:'1px solid #ccd6e0',borderRadius:8,background:'#f3f7fb'}}>
-  <strong>🎙️ Voice mock interview</strong>
-  <p style={{margin:'6px 0',fontSize:13}}>Answer aloud as if speaking to an interviewer. Review your transcript, then send it for AI feedback.</p>
   {supported===false?<p>Voice transcription is not supported in this browser. Use Chrome on desktop, or switch to Type.</p>:<>
-   <p aria-live="polite" style={{margin:'8px 0'}}><b>{listening?'🔴 Recording':'Ready to practice'}</b> · {time}</p>
-   <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+   <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
     <button type="button" onClick={start} disabled={listening||supported===null}>Start speaking</button>
+    <span role="timer" aria-label="Speaking timer" style={{fontVariantNumeric:'tabular-nums',fontWeight:600,minWidth:46}}>{time}</span>
     <button type="button" onClick={stop} disabled={!listening}>Stop</button>
     <button type="button" onClick={clear} disabled={!value&&!interim&&!listening}>Clear</button>
    </div>
