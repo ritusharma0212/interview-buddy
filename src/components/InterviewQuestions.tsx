@@ -69,7 +69,7 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
        </details>
        <div style={{marginTop:12,padding:12,background:'#f8f9fa',border:'1px solid #ddd',borderRadius:6}}>
         <label htmlFor={`practice-${interviewId}-${index}`}><b>Practice your answer</b></label>
-        <VoicePractice key={`${set.id}-${index}`} onUseTranscript={text=>setAnswers(p=>({...p,[index]:text}))}/>
+        <VoicePractice key={`${set.id}-${index}`} value={answers[index]??''} onChange={text=>setAnswers(p=>({...p,[index]:text}))}/>
         <textarea id={`practice-${interviewId}-${index}`} rows={5} maxLength={12000}
          placeholder="Type your interview answer here (at least 20 characters)…"
          value={answers[index]??''} onChange={e=>setAnswers(p=>({...p,[index]:e.target.value}))}

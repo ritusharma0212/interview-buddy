@@ -15,15 +15,16 @@ type SpeechWindow=Window&{
  webkitSpeechRecognition?:new()=>SpeechRecognitionLike;
 };
 
-export function VoicePractice({onUseTranscript}:{onUseTranscript:(text:string)=>void}){
+export function VoicePractice({value,onChange}:{value:string;onChange:(text:string)=>void}){
  const recognition=useRef<SpeechRecognitionLike|null>(null);
  const [supported,setSupported]=useState<boolean|null>(null);
  const [listening,setListening]=useState(false);
- const [transcript,setTranscript]=useState('');
  const [interim,setInterim]=useState('');
  const [seconds,setSeconds]=useState(0);
  const [error,setError]=useState('');
  const finalText=useRef('');
+ const latestValue=useRef(value);
+ latestValue.current=value;
  useEffect(()=>{
   const browser=window as SpeechWindow;
   setSupported(Boolean(browser.SpeechRecognition||browser.webkitSpeechRecognition));
@@ -38,7 +39,7 @@ export function VoicePractice({onUseTranscript}:{onUseTranscript:(text:string)=>
   const browser=window as SpeechWindow;
   const SpeechRecognition=browser.SpeechRecognition||browser.webkitSpeechRecognition;
   if(!SpeechRecognition){setError('Speech recognition is unavailable in this browser. Try Chrome on a desktop computer.');return}
-  setError('');setInterim('');
+  setError('');setInterim('');finalText.current=latestValue.current.trim();
   const session=new SpeechRecognition();
   session.lang='en-US';session.continuous=true;session.interimResults=true;
   session.onresult=(event)=>{
@@ -50,7 +51,7 @@ export function VoicePractice({onUseTranscript}:{onUseTranscript:(text:string)=>
      if(phrase)finalText.current=(finalText.current+' '+phrase).trim();
     }else{partial+=result[0].transcript}
    }
-   setTranscript(finalText.current);setInterim(partial);
+   onChange(finalText.current);setInterim(partial);
   };
   session.onerror=(event)=>{
    const messages:Record<string,string>={
@@ -66,7 +67,7 @@ export function VoicePractice({onUseTranscript}:{onUseTranscript:(text:string)=>
   catch{setError('Could not start the microphone. Check browser permissions.')}
  }
  function stop(){recognition.current?.stop();setListening(false)}
- function clear(){recognition.current?.abort();recognition.current=null;setListening(false);setTranscript('');setInterim('');finalText.current='';setSeconds(0);setError('')}
+ function clear(){recognition.current?.abort();recognition.current=null;setListening(false);onChange('');setInterim('');finalText.current='';setSeconds(0);setError('')}
  const time=`${Math.floor(seconds/60).toString().padStart(2,'0')}:${(seconds%60).toString().padStart(2,'0')}`;
  return <div style={{margin:'12px 0',padding:12,border:'1px solid #ccd6e0',borderRadius:8,background:'#f3f7fb'}}>
   <strong>🎙️ Voice mock interview</strong>
@@ -76,12 +77,10 @@ export function VoicePractice({onUseTranscript}:{onUseTranscript:(text:string)=>
    <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
     <button type="button" onClick={start} disabled={listening||supported===null}>Start speaking</button>
     <button type="button" onClick={stop} disabled={!listening}>Stop</button>
-    <button type="button" onClick={clear} disabled={!transcript&&!interim&&!listening}>Clear</button>
+    <button type="button" onClick={clear} disabled={!value&&!interim&&!listening}>Clear</button>
    </div>
-   <div aria-live="polite" style={{marginTop:10,padding:10,minHeight:48,background:'white',border:'1px solid #ddd',borderRadius:4,whiteSpace:'pre-wrap'}}>
-    {transcript||interim?<>{transcript} <span style={{color:'#667085'}}>{interim}</span></>:<span style={{color:'#667085'}}>Your spoken answer will appear here…</span>}
-   </div>
-   <button type="button" style={{marginTop:8}} disabled={listening||transcript.trim().length===0} onClick={()=>onUseTranscript(transcript.trim())}>Use transcript as my answer ↓</button>
+   {interim&&<p aria-live="polite" style={{color:'#667085'}}>Recognizing: {interim}</p>}
+   <p style={{fontSize:12}}>Your spoken words appear in the editable answer box below. You can correct them before clicking Get AI feedback.</p>
   </>}
   {error&&<p role="alert" style={{color:'crimson'}}>{error}</p>}
   <p style={{fontSize:12,marginBottom:0}}>Your browser performs speech recognition; depending on the browser, audio may be processed by its speech service. Interview Buddy does not upload or store audio recordings. Only text you submit for AI feedback is saved.</p>
