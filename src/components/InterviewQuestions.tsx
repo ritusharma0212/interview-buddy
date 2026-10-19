@@ -2,11 +2,17 @@
 import {useEffect,useState} from 'react';
 type Question={question:string;competency:string;why_this_matters:string;answer_guidance:string};
 type QuestionSet={id:string;questions:Question[];created_at:string};
+type Feedback={score:number;strengths:string[];improvements:string[];improved_answer:string};
+type Attempt={id:string;question_index:number;answer_text:string;feedback:Feedback;created_at:string};
 export function InterviewQuestions({interviewId}:{interviewId:string}){
  const [set,setSet]=useState<QuestionSet|null>(null);
  const [loading,setLoading]=useState(true);
  const [generating,setGenerating]=useState(false);
  const [error,setError]=useState('');
+ const [answers,setAnswers]=useState<Record<number,string>>({});
+ const [attempts,setAttempts]=useState<Attempt[]>([]);
+ const [evaluating,setEvaluating]=useState<number|null>(null);
+ const [practiceError,setPracticeError]=useState<Record<number,string>>({});
  useEffect(()=>{
    let active=true;
    fetch(`/api/interviews/${interviewId}/questions`).then(async r=>{
@@ -26,6 +32,28 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
    }catch(e){setError(e instanceof Error?e.message:'Generation failed')}
    finally{setGenerating(false)}
  }
+ useEffect(()=>{
+   if(!set){setAttempts([]);return}
+   let active=true;
+   fetch(`/api/interviews/${interviewId}/practice?question_set_id=${encodeURIComponent(set.id)}`)
+    .then(async res=>{const data=await res.json();if(!res.ok)throw new Error(data.error||'Could not load practice history');if(active)setAttempts(data.attempts??[])})
+    .catch(e=>{if(active)setError(e instanceof Error?e.message:'Could not load practice history')});
+   return ()=>{active=false};
+ },[interviewId,set?.id]);
+ async function evaluate(index:number){
+   if(!set)return;
+   setEvaluating(index);setPracticeError(p=>({...p,[index]:''}));
+   try{
+    const res=await fetch(`/api/interviews/${interviewId}/practice`,{
+     method:'POST',headers:{'Content-Type':'application/json'},
+     body:JSON.stringify({question_set_id:set.id,question_index:index,answer_text:answers[index]??''})
+    });
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Feedback failed');
+    setAttempts(prev=>[data.attempt,...prev]);
+   }catch(e){setPracticeError(p=>({...p,[index]:e instanceof Error?e.message:'Feedback failed'}))}
+   finally{setEvaluating(null)}
+ }
  return <section style={{marginTop:12}}>
    <button type="button" onClick={generate} disabled={generating||loading}>
      {generating?'Generating questions…':set?'Regenerate AI questions':'Generate AI interview questions'}
@@ -38,6 +66,23 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
        <details><summary>Why it matters and how to answer</summary>
          <p>{q.why_this_matters}</p><p>{q.answer_guidance}</p>
        </details>
+       <div style={{marginTop:12,padding:12,background:'#f8f9fa',border:'1px solid #ddd',borderRadius:6}}>
+        <label htmlFor={`practice-${interviewId}-${index}`}><b>Practice your answer</b></label>
+        <textarea id={`practice-${interviewId}-${index}`} rows={5} maxLength={12000}
+         placeholder="Type your interview answer here (at least 20 characters)…"
+         value={answers[index]??''} onChange={e=>setAnswers(p=>({...p,[index]:e.target.value}))}
+         style={{display:'block',width:'100%',boxSizing:'border-box',margin:'8px 0'}}/>
+        <button type="button" disabled={evaluating!==null||(answers[index]??'').trim().length<20}
+         onClick={()=>evaluate(index)}>{evaluating===index?'Evaluating…':'Get AI feedback'}</button>
+        {practiceError[index]&&<p role="alert" style={{color:'crimson'}}>{practiceError[index]}</p>}
+        {attempts.filter(a=>a.question_index===index).slice(0,3).map(a=><div key={a.id} style={{borderTop:'1px solid #ddd',marginTop:12,paddingTop:10}}>
+         <p><b>AI practice score: {a.feedback.score}/10</b> · <small>{new Date(a.created_at).toLocaleString()}</small></p>
+         <details><summary>View your submitted answer</summary><p style={{whiteSpace:'pre-wrap'}}>{a.answer_text}</p></details>
+         <p><b>Strengths</b></p><ul>{a.feedback.strengths.map((s,j)=><li key={j}>{s}</li>)}</ul>
+         <p><b>How to improve</b></p><ul>{a.feedback.improvements.map((s,j)=><li key={j}>{s}</li>)}</ul>
+         <details><summary>Improved example answer</summary><p style={{whiteSpace:'pre-wrap'}}>{a.feedback.improved_answer}</p></details>
+        </div>)}
+       </div>
      </li>)}</ol>
    </div>}
  </section>;
