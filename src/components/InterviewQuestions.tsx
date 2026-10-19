@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import {VoicePractice} from './VoicePractice';
+import {PracticeFeedbackHistory} from './PracticeFeedbackHistory';
 type Question={question:string;competency:string;why_this_matters:string;answer_guidance:string};
 type QuestionSet={id:string;questions:Question[];created_at:string};
 type Feedback={score:number;strengths:string[];improvements:string[];improved_answer:string};
@@ -89,13 +90,7 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
         <button type="button" disabled={evaluating!==null||(answers[index]??'').trim().length<20}
          onClick={()=>evaluate(index)}>{evaluating===index?'Evaluating…':'Get AI feedback'}</button>
         {practiceError[index]&&<p role="alert" style={{color:'crimson'}}>{practiceError[index]}</p>}
-        {attempts.filter(a=>a.question_index===index).slice(0,3).map(a=><div key={a.id} style={{borderTop:'1px solid #ddd',marginTop:12,paddingTop:10}}>
-         <p><b>AI practice score: {a.feedback.score}/10</b> · <small>{new Date(a.created_at).toLocaleString()}</small></p>
-         <details><summary>View your submitted answer</summary><p style={{whiteSpace:'pre-wrap'}}>{a.answer_text}</p></details>
-         <p><b>Strengths</b></p><ul>{a.feedback.strengths.map((s,j)=><li key={j}>{s}</li>)}</ul>
-         <p><b>How to improve</b></p><ul>{a.feedback.improvements.map((s,j)=><li key={j}>{s}</li>)}</ul>
-         <details><summary>Improved example answer</summary><p style={{whiteSpace:'pre-wrap'}}>{a.feedback.improved_answer}</p></details>
-        </div>)}
+        <PracticeFeedbackHistory key={`${set.id}-${index}`} attempts={attempts.filter(a=>a.question_index===index)}/>
        </div>
      </li>)}</ol>
    </div>}
