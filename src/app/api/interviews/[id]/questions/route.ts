@@ -59,7 +59,24 @@ export async function POST(_request:Request,ctx:Context){
     return NextResponse.json({error:'AI request timed out or could not connect. Please retry.'},{status:502});
   }finally{clearTimeout(timeout);}
   if(!response.ok){
-    return NextResponse.json({error:response.status===429?'AI is temporarily rate limited. Please retry later.':'AI generation failed. Check API billing and server logs.'},{status:502});
+    let providerCode='unknown';
+    let providerStatus='unknown';
+    try {
+      const details=await response.json();
+      providerCode=String(details?.error?.code??'unknown').slice(0,80);
+      providerStatus=String(details?.error?.status??'unknown').slice(0,80);
+    } catch {}
+    console.error('Gemini API request failed', {httpStatus:response.status,providerCode,providerStatus,model});
+    const message=response.status===429
+      ? 'Gemini free-tier quota or rate limit reached. Check Google AI Studio Rate Limit.'
+      : response.status===401||response.status===403
+        ? 'Gemini API key or project permission error. Check Google AI Studio.'
+        : response.status===404
+          ? 'Gemini model not found or unavailable for this project.'
+          : response.status===400
+            ? 'Gemini rejected the request format. Check Vercel logs.'
+            : 'Gemini API request failed. Check Vercel logs for the provider status.';
+    return NextResponse.json({error:message},{status:502});
   }
   let questions:z.infer<typeof questionSchema>[];
   try{
