@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useState} from 'react';
+import {VoicePractice} from './VoicePractice';
 type Question={question:string;competency:string;why_this_matters:string;answer_guidance:string};
 type QuestionSet={id:string;questions:Question[];created_at:string};
 type Feedback={score:number;strengths:string[];improvements:string[];improved_answer:string};
@@ -68,6 +69,7 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
        </details>
        <div style={{marginTop:12,padding:12,background:'#f8f9fa',border:'1px solid #ddd',borderRadius:6}}>
         <label htmlFor={`practice-${interviewId}-${index}`}><b>Practice your answer</b></label>
+        <VoicePractice key={`${set.id}-${index}`} onUseTranscript={text=>setAnswers(p=>({...p,[index]:text}))}/>
         <textarea id={`practice-${interviewId}-${index}`} rows={5} maxLength={12000}
          placeholder="Type your interview answer here (at least 20 characters)…"
          value={answers[index]??''} onChange={e=>setAnswers(p=>({...p,[index]:e.target.value}))}
