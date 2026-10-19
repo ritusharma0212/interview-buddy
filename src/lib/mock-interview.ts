@@ -11,8 +11,6 @@ export async function mockContext(interviewId:string){
   .select('id,company_name,role_title,interview_stage,job_description,recruiter_instructions')
   .eq('id',interviewId).eq('user_id',user.id).maybeSingle();
  if(!interview)return {error:NextResponse.json({error:'Interview not found'},{status:404})};
- const {data:entitlement}=await db.from('user_entitlements').select('plan').eq('user_id',user.id).maybeSingle();
- if(entitlement?.plan!=='pro')return {error:NextResponse.json({error:'Mock Interview requires an active PRO plan.'},{status:403})};
  if(!process.env.SUPABASE_SERVICE_ROLE_KEY)return {error:NextResponse.json({error:'Mock Interview storage is not configured.'},{status:503})};
  const admin=createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!,process.env.SUPABASE_SERVICE_ROLE_KEY,{auth:{autoRefreshToken:false,persistSession:false}});
  return {user,interview,admin};
