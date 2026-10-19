@@ -64,8 +64,11 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
    {loading&&<p>Loading saved questions…</p>}
    {error&&<p role="alert" style={{color:'crimson'}}>{error}</p>}
    {set&&<div><p><small>AI-generated practice questions based on your saved job description and stage; not verified company interview questions.</small></p>
-     <ol>{set.questions.map((q,index)=><li key={index} style={{marginBottom:18}}>
-       <strong>{q.question}</strong><p><b>Competency:</b> {q.competency}</p>
+     <ol style={{paddingLeft:24}}>{set.questions.map((q,index)=><li key={index} style={{marginBottom:10}}>
+       <details style={{border:'1px solid #cbd5e1',borderRadius:8,padding:'12px 14px',background:'white'}}>
+        <summary style={{cursor:'pointer',fontWeight:600,lineHeight:1.5}}>{q.question}</summary>
+        <div style={{marginTop:12}}>
+       <p><b>Competency:</b> {q.competency}</p>
        <details><summary>Why it matters and how to answer</summary>
          <p>{q.why_this_matters}</p><p>{q.answer_guidance}</p>
        </details>
@@ -92,6 +95,8 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
         {practiceError[index]&&<p role="alert" style={{color:'crimson'}}>{practiceError[index]}</p>}
         <PracticeFeedbackHistory key={`${set.id}-${index}`} attempts={attempts.filter(a=>a.question_index===index)}/>
        </div>
+        </div>
+       </details>
      </li>)}</ol>
    </div>}
  </section>;
