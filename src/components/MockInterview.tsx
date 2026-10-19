@@ -36,7 +36,7 @@ export function MockInterview({interviewId}:{interviewId:string}){
  const active=current?.status==='active';
  const lastQuestion=active?[...current.turns].reverse().find(t=>t.role==='interviewer')?.text:null;
  return <section style={{padding:14,border:'1px solid #cbd5e1',borderRadius:8,marginTop:12}}>
-  <p><b>PRO Mock Interview</b> · 30 minutes · AI interviewer</p>
+  <p><b>Mock Interview</b> · 30 minutes · AI interviewer</p>
   {error&&<p role="alert" style={{color:'crimson'}}>{error}</p>}
   {!active&&<button type="button" disabled={busy} onClick={()=>act(url)}>{busy?'Starting…':'Start 30-minute mock interview'}</button>}
   {active&&<>
