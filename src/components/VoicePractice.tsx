@@ -72,7 +72,7 @@ export function VoicePractice({value,onChange}:{value:string;onChange:(text:stri
  return <div style={{margin:'12px 0',padding:12,border:'1px solid #ccd6e0',borderRadius:8,background:'#f3f7fb'}}>
   <strong>🎙️ Voice mock interview</strong>
   <p style={{margin:'6px 0',fontSize:13}}>Answer aloud as if speaking to an interviewer. Review your transcript, then send it for AI feedback.</p>
-  {supported===false?<p>Voice transcription is not supported in this browser. Use Chrome on desktop, or type your answer below.</p>:<>
+  {supported===false?<p>Voice transcription is not supported in this browser. Use Chrome on desktop, or switch to Type.</p>:<>
    <p aria-live="polite" style={{margin:'8px 0'}}><b>{listening?'🔴 Recording':'Ready to practice'}</b> · {time}</p>
    <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
     <button type="button" onClick={start} disabled={listening||supported===null}>Start speaking</button>
@@ -80,7 +80,14 @@ export function VoicePractice({value,onChange}:{value:string;onChange:(text:stri
     <button type="button" onClick={clear} disabled={!value&&!interim&&!listening}>Clear</button>
    </div>
    {interim&&<p aria-live="polite" style={{color:'#667085'}}>Recognizing: {interim}</p>}
-   <p style={{fontSize:12}}>Your spoken words appear in the editable answer box below. You can correct them before clicking Get AI feedback.</p>
+   {!listening&&value.trim().length>0&&<>
+    <label htmlFor="voice-answer-transcript"><b>Review your spoken answer</b></label>
+    <textarea id="voice-answer-transcript" rows={5} maxLength={12000}
+     value={value} onChange={e=>onChange(e.target.value)}
+     style={{display:'block',width:'100%',boxSizing:'border-box',marginTop:8}}/>
+    <p style={{fontSize:12}}>Correct any transcription mistakes, then click Get AI feedback.</p>
+   </>}
+   {listening&&<p style={{fontSize:12}}>Speak naturally. Your transcript will be available to review after you stop.</p>}
   </>}
   {error&&<p role="alert" style={{color:'crimson'}}>{error}</p>}
   <p style={{fontSize:12,marginBottom:0}}>Your browser performs speech recognition; depending on the browser, audio may be processed by its speech service. Interview Buddy does not upload or store audio recordings. Only text you submit for AI feedback is saved.</p>

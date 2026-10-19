@@ -11,6 +11,7 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
  const [generating,setGenerating]=useState(false);
  const [error,setError]=useState('');
  const [answers,setAnswers]=useState<Record<number,string>>({});
+ const [answerModes,setAnswerModes]=useState<Record<number,'type'|'speak'>>({});
  const [attempts,setAttempts]=useState<Attempt[]>([]);
  const [evaluating,setEvaluating]=useState<number|null>(null);
  const [practiceError,setPracticeError]=useState<Record<number,string>>({});
@@ -68,12 +69,23 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
          <p>{q.why_this_matters}</p><p>{q.answer_guidance}</p>
        </details>
        <div style={{marginTop:12,padding:12,background:'#f8f9fa',border:'1px solid #ddd',borderRadius:6}}>
-        <label htmlFor={`practice-${interviewId}-${index}`}><b>Practice your answer</b></label>
-        <VoicePractice key={`${set.id}-${index}`} value={answers[index]??''} onChange={text=>setAnswers(p=>({...p,[index]:text}))}/>
-        <textarea id={`practice-${interviewId}-${index}`} rows={5} maxLength={12000}
-         placeholder="Type your interview answer here (at least 20 characters)…"
-         value={answers[index]??''} onChange={e=>setAnswers(p=>({...p,[index]:e.target.value}))}
-         style={{display:'block',width:'100%',boxSizing:'border-box',margin:'8px 0'}}/>
+        <p style={{fontWeight:600,margin:'0 0 8px'}}>How would you like to answer?</p>
+        <div role="group" aria-label={`Answer method for question ${index+1}`} style={{display:'flex',gap:8,marginBottom:10}}>
+         <button type="button" aria-pressed={(answerModes[index]??'type')==='type'}
+          onClick={()=>setAnswerModes(p=>({...p,[index]:'type'}))}
+          style={{padding:'7px 14px',borderRadius:6,background:(answerModes[index]??'type')==='type'?'#dbeafe':'white',border:'1px solid #94a3b8'}}>⌨️ Type</button>
+         <button type="button" aria-pressed={answerModes[index]==='speak'}
+          onClick={()=>setAnswerModes(p=>({...p,[index]:'speak'}))}
+          style={{padding:'7px 14px',borderRadius:6,background:answerModes[index]==='speak'?'#dbeafe':'white',border:'1px solid #94a3b8'}}>🎙️ Speak</button>
+        </div>
+        {(answerModes[index]??'type')==='type'?<>
+         <label htmlFor={`practice-${interviewId}-${index}`}><b>Type your answer</b></label>
+         <textarea id={`practice-${interviewId}-${index}`} rows={5} maxLength={12000}
+          placeholder="Type your interview answer here (at least 20 characters)…"
+          value={answers[index]??''} onChange={e=>setAnswers(p=>({...p,[index]:e.target.value}))}
+          style={{display:'block',width:'100%',boxSizing:'border-box',margin:'8px 0'}}/>
+        </>:<VoicePractice key={`${set.id}-${index}`} value={answers[index]??''}
+         onChange={text=>setAnswers(p=>({...p,[index]:text}))}/>}
         <button type="button" disabled={evaluating!==null||(answers[index]??'').trim().length<20}
          onClick={()=>evaluate(index)}>{evaluating===index?'Evaluating…':'Get AI feedback'}</button>
         {practiceError[index]&&<p role="alert" style={{color:'crimson'}}>{practiceError[index]}</p>}
