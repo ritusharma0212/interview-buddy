@@ -21,8 +21,8 @@ export function PreparationModes({dashboard,practice,interviews}:{dashboard:Reac
    <div hidden={mode!=='practice'} className="mode-panel">
     <h2>Choose your preparation mode</h2>
     <div className="workspace-grid" style={{marginBottom:20}}>
-     <div className="surface"><strong>Question Practice</strong><span style={{display:'block',marginTop:6}}>Self-paced answers, AI feedback and progress</span></div>
-     <div className="surface"><strong>Mock Interview</strong><span style={{display:'block',marginTop:6}}>30-minute interviewer-led conversation</span></div>
+     <button type="button" aria-pressed={mode==='practice'} className="surface" onClick={()=>setMode('practice')} style={{textAlign:'left'}}><strong>Question Practice</strong><span style={{display:'block',marginTop:6}}>Self-paced answers, AI feedback and progress</span></button>
+     <button type="button" aria-pressed={mode==='mock'} className="surface" onClick={()=>setMode('mock')} style={{textAlign:'left'}}><strong>Mock Interview</strong><span style={{display:'block',marginTop:6}}>30-minute interviewer-led conversation</span></button>
     </div>
     {practice}
    </div>
