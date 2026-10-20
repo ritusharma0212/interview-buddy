@@ -88,3 +88,10 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 .app-shell{padding-top:18px}
 .dashboard-progress-heading{margin-bottom:8px}
 .dashboard-progress section[aria-label="Practice progress dashboard"]{padding-top:14px!important}
+
+/* Align dashboard heading, progress selector and Add interview on one row. */
+.dashboard-home{position:relative}
+.dashboard-home .dashboard-actions{position:absolute;top:0;right:0;margin:0;z-index:1}
+.dashboard-home .dashboard-progress-heading{justify-content:flex-start;padding-right:190px;min-height:47px;gap:18px;align-items:center}
+.dashboard-home .dashboard-progress-tabs{flex-shrink:0}
+@media(max-width:760px){.dashboard-home .dashboard-actions{position:static;justify-content:flex-end;margin-bottom:12px}.dashboard-home .dashboard-progress-heading{padding-right:0;min-height:0;flex-wrap:wrap}}
