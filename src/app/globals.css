@@ -75,3 +75,5 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 .form-card form > button{background:var(--primary);border-color:var(--primary);color:white}
 .form-card form > button:hover:not(:disabled){background:var(--primary-dark);color:white}
 @media(max-width:640px){.form-card form{grid-template-columns:1fr}.form-card form > *{grid-column:1!important;grid-row:auto!important}}
+
+.dashboard-actions{display:flex;justify-content:flex-end;margin-bottom:12px}.dashboard-actions button{background:var(--primary);border-color:var(--primary);color:#fff;padding:11px 19px;box-shadow:0 4px 12px rgba(49,95,168,.15)}.dashboard-actions button:hover:not(:disabled){background:var(--primary-dark);color:#fff}.mode-panel[hidden]{display:none!important}
