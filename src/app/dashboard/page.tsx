@@ -6,7 +6,7 @@ import {DashboardProgress} from '@/components/DashboardProgress';
 import {PreparationModes} from '@/components/PreparationModes';
 export default async function Dashboard(){const db=await serverSupabase();const {data:{user}}=await db.auth.getUser();if(!user)redirect('/login');const {data,error}=await db.from('interviews').select('id,company_name,role_title,interview_stage,interview_at').order('created_at',{ascending:false}).limit(100);const {data:history, error:historyError}=await db.from('interview_practice_attempts').select('id,interview_id,question_set_id,question_index,created_at,feedback').eq('user_id',user.id).order('created_at',{ascending:false}).limit(500);
 const {data:mockSessions,mockError}=await (async()=>{const result=await db.from('mock_interview_sessions').select('id,interview_id,status,started_at,assessment').eq('user_id',user.id).limit(1000);return {data:result.data,mockError:result.error}})();
-const {data:questionSets, error:questionSetsError}=await db.from('interview_question_sets')
+const {data:questionSets}=await db.from('interview_question_sets')
  .select('id,interview_id,questions,created_at').eq('user_id',user.id)
  .order('created_at',{ascending:false}).limit(1000);
 const latestSets=new Map<string,{id:string;questions:unknown}>();
