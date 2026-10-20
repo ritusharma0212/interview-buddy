@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import {VoicePractice} from './VoicePractice';
+import {InterviewerVoice} from './InterviewerVoice';
 
 type Turn={role:'interviewer'|'candidate';text:string};
 type Assessment={score:number;strengths:string[];improvements:string[];summary:string};
@@ -42,6 +43,7 @@ export function MockInterview({interviewId}:{interviewId:string}){
   {active&&<>
    <p role="timer" style={{fontSize:22,fontWeight:700,fontVariantNumeric:'tabular-nums'}}>Time remaining: {time}</p>
    <p><b>Interviewer:</b> {lastQuestion}</p>
+   <InterviewerVoice question={lastQuestion??''} enabled={remaining>0}/>
    {remaining>0&&<>
     <div style={{display:'flex',gap:8,marginBottom:8}}>
      <button type="button" aria-pressed={mode==='type'} onClick={()=>setMode('type')}>Type</button>
