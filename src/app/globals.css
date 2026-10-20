@@ -64,3 +64,14 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 .home-layout{max-width:720px;margin:50px auto}
 @media(max-width:900px){.dashboard-grid,.workspace-grid{grid-template-columns:1fr}}
 @media(max-width:640px){.app-shell{padding:24px 16px 48px}.app-header-inner{padding:14px 16px;gap:12px}.app-nav{order:3;width:100%;justify-content:space-between}.app-nav button{padding:8px 10px;font-size:.9rem}.surface{padding:17px}.mode-panel section[aria-label="Practice progress dashboard"]{padding:16px!important}.auth-layout{margin:18px auto}.auth-layout .surface{padding:22px}button{max-width:100%}}
+
+.form-card form{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px!important}
+.form-card form > h2{grid-column:1/-1}
+.form-card form > input[name="company_name"]{grid-column:1;grid-row:2}
+.form-card form > input[name="role_title"]{grid-column:2;grid-row:2}
+.form-card form > select[name="interview_stage"]{grid-column:1;grid-row:3}
+.form-card form > label{grid-column:2;grid-row:3}
+.form-card form > textarea,.form-card form > button,.form-card form > p[role="alert"]{grid-column:1/-1}
+.form-card form > button{background:var(--primary);border-color:var(--primary);color:white}
+.form-card form > button:hover:not(:disabled){background:var(--primary-dark);color:white}
+@media(max-width:640px){.form-card form{grid-template-columns:1fr}.form-card form > *{grid-column:1!important;grid-row:auto!important}}
