@@ -2,9 +2,10 @@
 import {useEffect,useState} from 'react';
 import {VoicePractice} from './VoicePractice';
 import {InterviewerVoice} from './InterviewerVoice';
+import {MockBetterAnswers} from './MockBetterAnswers';
 
 type Turn={role:'interviewer'|'candidate';text:string};
-type Assessment={score:number;strengths:string[];improvements:string[];summary:string};
+type Assessment={score:number;strengths:string[];improvements:string[];summary:string;betterAnswers?:{question:string;yourAnswer:string;betterAnswer:string;whyBetter:string}[]};
 type Session={id:string;status:'active'|'completed';started_at:string;ended_at:string|null;turns:Turn[];assessment:Assessment|null};
 export function MockInterview({interviewId}:{interviewId:string}){
  const [sessions,setSessions]=useState<Session[]>([]);
@@ -63,12 +64,13 @@ export function MockInterview({interviewId}:{interviewId:string}){
    <p>{current.assessment.summary}</p>
    <b>Strengths</b><ul>{current.assessment.strengths.map((s,i)=><li key={i}>{s}</li>)}</ul>
    <b>Areas to improve</b><ul>{current.assessment.improvements.map((s,i)=><li key={i}>{s}</li>)}</ul>
+   <MockBetterAnswers answers={current.assessment.betterAnswers}/>
    <details><summary>Full interview transcript</summary>{current.turns.map((t,i)=><p key={i}><b>{t.role==='interviewer'?'Interviewer':'You'}:</b> {t.text}</p>)}</details>
   </div>}
   {sessions.filter(s=>s.status==='completed').length>0&&<details style={{marginTop:12}}><summary>Previous mock interviews</summary>
    {sessions.filter(s=>s.status==='completed').map(s=><details key={s.id} style={{padding:8,borderBottom:'1px solid #ddd'}}>
     <summary>{new Date(s.started_at).toLocaleString()} · Score: {s.assessment?.score??'—'}/10</summary>
-    <p>{s.assessment?.summary}</p><details><summary>Transcript</summary>{s.turns.map((t,i)=><p key={i}><b>{t.role==='interviewer'?'Interviewer':'You'}:</b> {t.text}</p>)}</details>
+    <p>{s.assessment?.summary}</p><MockBetterAnswers answers={s.assessment?.betterAnswers}/><details><summary>Transcript</summary>{s.turns.map((t,i)=><p key={i}><b>{t.role==='interviewer'?'Interviewer':'You'}:</b> {t.text}</p>)}</details>
    </details>)}
   </details>}
   <p style={{fontSize:12,color:'#475467'}}>AI-generated interview simulation. Speech recognition is provided by your browser. Session time is enforced by the server.</p>
