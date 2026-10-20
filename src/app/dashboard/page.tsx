@@ -14,5 +14,5 @@ const workspace=<><h2>Saved interview workspaces</h2>{error&&<p role="alert">{er
 return <PreparationModes interviews={data??[]}
  dashboard={<><div className="page-intro"><h1>Your interviews</h1><p>Signed in as {user.email}</p></div>{historyError?<p role="alert">Could not load practice progress. Check that migration 0003 has been applied.</p>:<PracticeProgress attempts={history??[]} interviews={data??[]}/>}<div className="surface" style={{marginTop:20}}>{workspace}</div></>}
  addInterview={<div className="workspace-grid"> <div className="surface form-card"><NewInterview/></div><div className="surface practice-workspaces">{workspace}</div></div>}
- practice={<div className="workspace-grid"><div className="surface form-card"><NewInterview/></div><div className="surface practice-workspaces">{workspace}</div></div>}
+ practice={<div className="surface practice-workspaces">{workspace}</div>}
 />}
