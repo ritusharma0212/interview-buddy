@@ -2,22 +2,23 @@
 import {useState,type ReactNode} from 'react';
 import {MockInterview} from './MockInterview';
 type Interview={id:string;company_name:string;role_title:string;interview_stage:string};
-export function PreparationModes({dashboard,practice,interviews}:{dashboard:ReactNode;practice:ReactNode;interviews:Interview[]}){
+export function PreparationModes({dashboard,practice,addInterview,interviews}:{dashboard:ReactNode;practice:ReactNode;addInterview:ReactNode;interviews:Interview[]}){
  const [mode,setMode]=useState<'dashboard'|'practice'|'mock'>('dashboard');
+ const [showAddInterview,setShowAddInterview]=useState(false);
  return <>
   <header className="app-header">
    <div className="app-header-inner">
     <div className="app-brand"><span className="app-brand-mark" aria-hidden="true">✦</span>Interview Buddy</div>
     <nav className="app-nav" aria-label="Preparation navigation">
-     <button type="button" aria-pressed={mode==='dashboard'} onClick={()=>setMode('dashboard')}>Dashboard</button>
-     <button type="button" aria-pressed={mode==='mock'} onClick={()=>setMode('mock')}>Mock Interview</button>
-     <button type="button" aria-pressed={mode==='practice'} onClick={()=>setMode('practice')}>Question Practice</button>
+     <button type="button" aria-pressed={mode==='dashboard'} onClick={()=>{setMode('dashboard');setShowAddInterview(false)}}>Dashboard</button>
+     <button type="button" aria-pressed={mode==='mock'} onClick={()=>{setMode('mock');setShowAddInterview(false)}}>Mock Interview</button>
+     <button type="button" aria-pressed={mode==='practice'} onClick={()=>{setMode('practice');setShowAddInterview(false)}}>Question Practice</button>
     </nav>
     <form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form>
    </div>
   </header>
   <div className="app-shell">
-   <div hidden={mode!=='dashboard'} className="mode-panel">{dashboard}</div>
+   <div hidden={mode!=='dashboard'} className="mode-panel">{showAddInterview?<><div className="page-intro"><button type="button" onClick={()=>setShowAddInterview(false)}>Dashboard</button></div>{addInterview}</>:<><div className="dashboard-actions"><button type="button" onClick={()=>setShowAddInterview(true)}>+ Add interview</button></div>{dashboard}</>}</div>
    <div hidden={mode!=='practice'} className="mode-panel">
     <h2>Choose your preparation mode</h2>
     <div className="workspace-grid" style={{marginBottom:20}}>
