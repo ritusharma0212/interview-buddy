@@ -18,9 +18,7 @@ export function PracticeProgress({attempts,interviews}:{attempts:Attempt[];inter
   const r=rows.filter(a=>a.interview_id===i.id);
   return {...i,count:r.length,average:r.length?(r.reduce((s,a)=>s+a.feedback.score,0)/r.length).toFixed(1):'—',latest:r.length?r[r.length-1].feedback.score:null};
  }).filter(i=>i.count>0);
- return <section aria-label="Practice progress dashboard" style={{padding:16,margin:'20px 0',border:'1px solid #d0d5dd',borderRadius:10,background:'#f8fafc'}}>
-  <h2 style={{marginTop:0}}>Practice progress</h2>
-  <p style={{fontSize:13}}>Track your saved Gemini interview feedback. Scores are AI estimates, not official interview assessments.</p>
+ return <section aria-label="Practice progress dashboard" style={{padding:16,margin:0,border:'1px solid #d0d5dd',borderRadius:10,background:'#f8fafc'}}>
   <label htmlFor="progress-filter"><b>Interview: </b></label>
   <select id="progress-filter" value={filter} onChange={e=>setFilter(e.target.value)} style={{maxWidth:'100%',padding:6}}>
    <option value="all">All interviews</option>
