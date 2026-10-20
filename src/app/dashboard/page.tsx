@@ -51,7 +51,7 @@ const mockStatus=(id:string):'Not started'|'In progress'|'Complete'=>{
 };
 const workspace=<><h2>Saved interview workspaces</h2>{error&&<p role="alert">{error.message}</p>}{!data?.length&&<p>No interviews yet.</p>}{data?.map(x=><SavedInterviewWorkspace key={x.id} interview={x} status={practiceStatus(x.id)}/>)}</>;
 return <PreparationModes interviews={data??[]} mockSessions={mockSessions??[]} mockStatuses={Object.fromEntries((data??[]).map(i=>[i.id,mockStatus(i.id)]))}
- dashboard={<><div className="page-intro"><h1>Your interviews</h1><p>Signed in as {user.email}</p></div><DashboardProgress attempts={history??[]} interviews={data??[]} sessions={mockSessions??[]} practiceError={Boolean(historyError)} mockError={Boolean(mockError)}/><div className="surface" style={{marginTop:20}}>{workspace}</div></>}
+ dashboard={<><DashboardProgress attempts={history??[]} interviews={data??[]} sessions={mockSessions??[]} practiceError={Boolean(historyError)} mockError={Boolean(mockError)}/><div className="surface" style={{marginTop:20}}>{workspace}</div></>}
  addInterview={<div className="workspace-grid"> <div className="surface form-card"><NewInterview/></div><div className="surface practice-workspaces">{workspace}</div></div>}
  practice={<div className="surface practice-workspaces">{workspace}</div>}
 />}
