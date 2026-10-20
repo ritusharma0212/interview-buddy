@@ -1,7 +1,6 @@
 'use client';
 import {useState,type ReactNode} from 'react';
 import {MockInterview} from './MockInterview';
-import {MockInterviewProgress} from './MockInterviewProgress';
 type Interview={id:string;company_name:string;role_title:string;interview_stage:string};
 type MockSession={id:string;interview_id:string;status:string;started_at:string;assessment:{score?:number}|null};
 export function PreparationModes({dashboard,practice,addInterview,interviews,mockSessions}:{dashboard:ReactNode;practice:ReactNode;addInterview:ReactNode;interviews:Interview[];mockSessions:MockSession[]}){
@@ -26,7 +25,6 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
    </div>
    {mode==='mock'&&<section className="mode-panel mock-panel">
     <h2>Mock Interview</h2>
-    <MockInterviewProgress sessions={mockSessions} interviews={interviews}/>
     {interviews.length===0?<p>Create an interview workspace under Question Practice first.</p>:
      interviews.map(i=><details key={i.id}>
       <summary><b>{i.company_name} — {i.role_title}</b> · {i.interview_stage}</summary>
