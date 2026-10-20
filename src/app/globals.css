@@ -77,3 +77,5 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 @media(max-width:640px){.form-card form{grid-template-columns:1fr}.form-card form > *{grid-column:1!important;grid-row:auto!important}}
 
 .dashboard-actions{display:flex;justify-content:flex-end;margin-bottom:12px}.dashboard-actions button{background:var(--primary);border-color:var(--primary);color:#fff;padding:11px 19px;box-shadow:0 4px 12px rgba(49,95,168,.15)}.dashboard-actions button:hover:not(:disabled){background:var(--primary-dark);color:#fff}.mode-panel[hidden]{display:none!important}
+
+.workspace-summary-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}.workspace-summary-heading strong{min-width:0}.interview-status{display:inline-flex;align-items:center;white-space:nowrap;font-size:.74rem;font-weight:650;line-height:1.4;border-radius:999px;padding:4px 10px;border:1px solid transparent}.interview-status-not-started{background:#f1f5f9;color:#526681;border-color:#e2e8f0}.interview-status-in-progress{background:#eaf2ff;color:#315fa8;border-color:#cbdcf6}.interview-status-complete{background:#e8f7ef;color:#147a4b;border-color:#c6ebd6}
