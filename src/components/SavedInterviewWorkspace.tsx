@@ -22,9 +22,9 @@ function InterviewDate({timestamp}:{timestamp:string|null}){
 export function SavedInterviewWorkspace({interview,status='Not started'}:{interview:Interview;status?:'Not started'|'In progress'|'Complete'}){
  return <details style={{border:'1px solid #ddd',borderRadius:8,padding:14,margin:'10px 0',background:'white'}}>
   <summary style={{cursor:'pointer',lineHeight:1.6}}>
-   <span className="workspace-summary-heading"><strong>{interview.company_name} — {interview.role_title}</strong><span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span></span>
+   <strong>{interview.company_name} — {interview.role_title}</strong>
    <span style={{display:'block',marginLeft:18,fontSize:14}}>
-    {interview.interview_stage} · <InterviewDate timestamp={interview.interview_at}/>
+    {interview.interview_stage} · <InterviewDate timestamp={interview.interview_at}/> <span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span>
    </span>
   </summary>
   <div style={{marginTop:14,borderTop:'1px solid #e5e7eb',paddingTop:12}}>
