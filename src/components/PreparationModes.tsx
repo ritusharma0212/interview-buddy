@@ -20,7 +20,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
    </div>
   </header>
   <div className="app-shell">
-   <div hidden={mode!=='dashboard'} className="mode-panel">{showAddInterview?<><div className="page-intro"><button type="button" onClick={()=>setShowAddInterview(false)}>Dashboard</button></div>{addInterview}</>:<><div className="dashboard-actions"><button type="button" onClick={()=>setShowAddInterview(true)}>+ Add interview</button></div>{dashboard}</>}</div>
+   <div hidden={mode!=='dashboard'} className="mode-panel dashboard-home">{showAddInterview?<><div className="page-intro"><button type="button" onClick={()=>setShowAddInterview(false)}>Dashboard</button></div>{addInterview}</>:<><div className="dashboard-actions"><button type="button" onClick={()=>setShowAddInterview(true)}>+ Add interview</button></div>{dashboard}</>}</div>
    <div hidden={mode!=='practice'} className="mode-panel">
     {practice}
    </div>
