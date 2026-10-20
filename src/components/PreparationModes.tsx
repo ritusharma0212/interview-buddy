@@ -20,11 +20,6 @@ export function PreparationModes({dashboard,practice,addInterview,interviews}:{d
   <div className="app-shell">
    <div hidden={mode!=='dashboard'} className="mode-panel">{showAddInterview?<><div className="page-intro"><button type="button" onClick={()=>setShowAddInterview(false)}>Dashboard</button></div>{addInterview}</>:<><div className="dashboard-actions"><button type="button" onClick={()=>setShowAddInterview(true)}>+ Add interview</button></div>{dashboard}</>}</div>
    <div hidden={mode!=='practice'} className="mode-panel">
-    <h2>Choose your preparation mode</h2>
-    <div className="workspace-grid" style={{marginBottom:20}}>
-     <button type="button" aria-pressed={mode==='practice'} className="surface" onClick={()=>setMode('practice')} style={{textAlign:'left'}}><strong>Question Practice</strong><span style={{display:'block',marginTop:6}}>Self-paced answers, AI feedback and progress</span></button>
-     <button type="button" aria-pressed={mode==='mock'} className="surface" onClick={()=>setMode('mock')} style={{textAlign:'left'}}><strong>Mock Interview</strong><span style={{display:'block',marginTop:6}}>30-minute interviewer-led conversation</span></button>
-    </div>
     {practice}
    </div>
    {mode==='mock'&&<section className="mode-panel mock-panel">
