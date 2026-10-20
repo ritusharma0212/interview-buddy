@@ -3,7 +3,8 @@ import {useState,type ReactNode} from 'react';
 import {MockInterview} from './MockInterview';
 type Interview={id:string;company_name:string;role_title:string;interview_stage:string};
 type MockSession={id:string;interview_id:string;status:string;started_at:string;assessment:{score?:number}|null};
-export function PreparationModes({dashboard,practice,addInterview,interviews,mockSessions}:{dashboard:ReactNode;practice:ReactNode;addInterview:ReactNode;interviews:Interview[];mockSessions:MockSession[]}){
+type InterviewStatus='Not started'|'In progress'|'Complete';
+export function PreparationModes({dashboard,practice,addInterview,interviews,mockSessions,mockStatuses}:{dashboard:ReactNode;practice:ReactNode;addInterview:ReactNode;interviews:Interview[];mockSessions:MockSession[];mockStatuses:Record<string,InterviewStatus>}){
  const [mode,setMode]=useState<'dashboard'|'practice'|'mock'>('dashboard');
  const [showAddInterview,setShowAddInterview]=useState(false);
  return <>
@@ -27,7 +28,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
     <h2>Mock Interview</h2>
     {interviews.length===0?<p>Create an interview workspace under Question Practice first.</p>:
      interviews.map(i=><details key={i.id}>
-      <summary><b>{i.company_name} — {i.role_title}</b> · {i.interview_stage}</summary>
+      <summary><b>{i.company_name} — {i.role_title}</b> · {i.interview_stage} <span className={`interview-status interview-status-${(mockStatuses[i.id]??'Not started').toLowerCase().replace(' ','-')}`}>{mockStatuses[i.id]??'Not started'}</span></summary>
       <MockInterview interviewId={i.id}/>
      </details>)}
    </section>}
