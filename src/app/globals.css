@@ -95,3 +95,17 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 .dashboard-home .dashboard-progress-heading{justify-content:flex-start;padding-right:190px;min-height:47px;gap:18px;align-items:center}
 .dashboard-home .dashboard-progress-tabs{flex-shrink:0}
 @media(max-width:760px){.dashboard-home .dashboard-actions{position:static;justify-content:flex-end;margin-bottom:12px}.dashboard-home .dashboard-progress-heading{padding-right:0;min-height:0;flex-wrap:wrap}}
+
+/* Dashboard header follows the reference: title + toggle left, Add interview right. */
+@media(min-width:761px){
+ .dashboard-home:not(:has(> .page-intro)){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:24px;align-items:center}
+ .dashboard-home .dashboard-progress{display:contents}
+ .dashboard-home .dashboard-progress-heading{grid-column:1;grid-row:1;display:flex;align-items:center;justify-content:flex-start;gap:28px;min-height:0;padding-right:0;margin:0 0 20px;flex-wrap:wrap}
+ .dashboard-home .dashboard-actions{position:static;grid-column:2;grid-row:1;align-self:start;justify-self:end;margin:0}
+ .dashboard-home .dashboard-progress>section,.dashboard-home .dashboard-progress>p{grid-column:1/-1}
+ .dashboard-home > .surface{grid-column:1/-1}
+}
+@media(max-width:760px){
+ .dashboard-home .dashboard-actions{position:static;margin-bottom:12px}
+ .dashboard-home .dashboard-progress-heading{gap:12px;padding-right:0}
+}
