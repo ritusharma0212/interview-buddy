@@ -37,7 +37,7 @@ export async function POST(request:Request){
   parts=[{text:'Extract factual career information from this PDF.'},{inline_data:{mime_type:'application/pdf',data:buffer.toString('base64')}}];
  }else{
   const url=allowedWebsite(String(source));
-  if(!url)return NextResponse.json({error:'For now, import supports HTTPS github.io profile pages only.'},{status:400});
+  if(!url)return NextResponse.json({error:'Import supports public HTTPS GitHub Pages and Google Sites pages only.'},{status:400});
   let page:Response;
   try{page=await fetch(url,{redirect:'error',signal:AbortSignal.timeout(12000),headers:{Accept:'text/html'}})}catch{return NextResponse.json({error:'Could not fetch website'},{status:502})}
   if(!page.ok||!(page.headers.get('content-type')??'').includes('text/html'))return NextResponse.json({error:'Website did not return HTML'},{status:400});
