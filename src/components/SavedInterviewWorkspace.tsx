@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import {InterviewQuestions} from '@/components/InterviewQuestions';
-import {TARGET_SENIORITIES} from '@/lib/target-seniority';
+import {TARGET_SENIORITIES,seniorityLabel} from '@/lib/target-seniority';
 
 type Interview={id:string;company_name:string;role_title:string;interview_stage:string;interview_at:string|null;target_seniority?:string};
 
@@ -34,7 +34,7 @@ export function SavedInterviewWorkspace({interview,status='Not started'}:{interv
   <summary style={{cursor:'pointer',lineHeight:1.6}}>
    <strong>{interview.company_name} — {interview.role_title}</strong>
    <span style={{display:'block',marginLeft:18,fontSize:14}}> 
-    {interview.interview_stage} · <InterviewDate timestamp={interview.interview_at}/> <span className="seniority-pill">{seniority}</span> <span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span>
+    {interview.interview_stage} · <InterviewDate timestamp={interview.interview_at}/> <span className="seniority-pill">{seniorityLabel(seniority,interview.role_title).label} · {seniorityLabel(seniority,interview.role_title).source==='inferred'?'Inferred':seniorityLabel(seniority,interview.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span>
    </span>
   </summary>
   <div style={{marginTop:14,borderTop:'1px solid #e5e7eb',paddingTop:12}}>
