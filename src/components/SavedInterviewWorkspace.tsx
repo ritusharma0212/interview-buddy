@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useState} from 'react';
+import {useRouter} from 'next/navigation';
 import {InterviewQuestions} from '@/components/InterviewQuestions';
 import {TARGET_SENIORITIES,seniorityLabel} from '@/lib/target-seniority';
 
@@ -21,6 +22,15 @@ function InterviewDate({timestamp}:{timestamp:string|null}){
 }
 
 export function SavedInterviewWorkspace({interview,status='Not started'}:{interview:Interview;status?:'Not started'|'In progress'|'Complete'}){
+ const router=useRouter();
+ const [deleting,setDeleting]=useState(false);
+ const [deleteError,setDeleteError]=useState('');
+ async function deleteInterview(){
+  if(!window.confirm('Permanently delete '+interview.company_name+' — '+interview.role_title+'? This also deletes its generated questions, practice answers, feedback and mock interview history. This cannot be undone.'))return;
+  setDeleting(true);setDeleteError('');
+  try{const response=await fetch('/api/interviews/'+interview.id,{method:'DELETE'});const result=await response.json();if(!response.ok)throw Error(result.error||'Delete failed');router.refresh();}
+  catch(error){setDeleteError(error instanceof Error?error.message:'Could not delete interview');setDeleting(false)}
+ }
  const [seniority,setSeniority]=useState(interview.target_seniority??'Auto-detect from role');
  const [saving,setSaving]=useState(false);
  const [message,setMessage]=useState('');
@@ -40,6 +50,7 @@ export function SavedInterviewWorkspace({interview,status='Not started'}:{interv
   <div style={{marginTop:14,borderTop:'1px solid #e5e7eb',paddingTop:12}}>
    <div className="workspace-seniority"><label htmlFor={'seniority-'+interview.id}>Target seniority</label><select id={'seniority-'+interview.id} value={seniority} disabled={saving} onChange={event=>void updateSeniority(event.target.value)}>{TARGET_SENIORITIES.map(level=><option key={level} value={level}>{level}</option>)}</select>{message&&<small role="status">{message}</small>}</div>
    <InterviewQuestions interviewId={interview.id}/>
+   <div className="interview-delete-actions"><button type="button" className="interview-delete-button" disabled={deleting} onClick={deleteInterview}>{deleting?'Deleting…':'Delete interview'}</button>{deleteError&&<span role="alert">{deleteError}</span>}</div>
   </div>
  </details>;
 }
