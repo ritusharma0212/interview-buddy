@@ -2,7 +2,7 @@
 import {useEffect,useState} from 'react';
 export function CareerProfile(){
  const [text,setText]=useState('');
- const [url,setUrl]=useState('https://ritusharma0212.github.io/personalpm/profile.html');
+ const [url,setUrl]=useState('');
  const [file,setFile]=useState<File|null>(null);
  const [loading,setLoading]=useState(true);
  const [working,setWorking]=useState(false);
@@ -10,7 +10,7 @@ export function CareerProfile(){
  const [saved,setSaved]=useState(false);
  useEffect(()=>{
   let live=true;
-  fetch('/api/profile').then(async r=>{const d=await r.json();if(!r.ok)throw Error(d.error);if(live){setText(d.profile?.profile_text??'');setUrl(d.profile?.source_url??'https://ritusharma0212.github.io/personalpm/profile.html');setSaved(Boolean(d.profile?.profile_text));}})
+  fetch('/api/profile').then(async r=>{const d=await r.json();if(!r.ok)throw Error(d.error);if(live){setText(d.profile?.profile_text??'');setUrl(d.profile?.source_url??'');setSaved(Boolean(d.profile?.profile_text));}})
    .catch(e=>{if(live)setMessage(e.message||'Could not load profile')}).finally(()=>{if(live)setLoading(false)});
   return ()=>{live=false};
  },[]);
@@ -51,7 +51,7 @@ export function CareerProfile(){
    </div>
    <div>
     <label htmlFor="profile-url">Personal website URL</label>
-    <input id="profile-url" type="url" value={url} onChange={e=>{setUrl(e.target.value);setSaved(false)}}/>
+    <input id="profile-url" type="url" placeholder="https://yourwebsite.github.io/profile.html" value={url} onChange={e=>{setUrl(e.target.value);setSaved(false)}}/>
     <button type="button" onClick={()=>importProfile('url')} disabled={working||loading||!url.trim()}>Import website</button>
     <small>Currently supports public GitHub Pages (github.io) HTML pages.</small>
    </div>
