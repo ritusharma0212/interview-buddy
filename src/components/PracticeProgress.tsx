@@ -30,15 +30,15 @@ export function PracticeProgress({attempts,interviews}:{attempts:Attempt[];inter
     ['Average score',total?average+'/10':'—'],
     ['Latest score',latest===null?'—':latest+'/10'],
     ['First-to-latest change',delta===null?'—':(delta>0?'+':'')+delta+' pts']
-   ].map(([label,value])=><div key={label} style={{padding:12,border:'1px solid #e0e4e9',background:'white',borderRadius:8}}>
-    <div style={{fontSize:12,color:'#475467'}}>{label}</div><div style={{fontSize:24,fontWeight:700}}>{value}</div>
+   ].map(([label,value])=><div key={label} style={{padding:12,border:'1px solid #e0e4e9',background:'var(--surface)',borderRadius:8}}>
+    <div style={{fontSize:12,color:'var(--muted)'}}>{label}</div><div style={{fontSize:24,fontWeight:700}}>{value}</div>
    </div>)}
   </div>
   {total===0?<p>No scored practice attempts yet. Answer an interview question and click Get AI feedback to start tracking your progress.</p>:<>
    <h3>Recent score trend</h3>
-   <div role="img" aria-label={`Scores over time, oldest to newest: ${recent.map(a=>a.feedback.score).join(', ')} out of 10`} style={{display:'flex',alignItems:'flex-end',gap:5,height:155,padding:'10px 8px 0',borderBottom:'1px solid #98a2b3',background:'white',overflowX:'auto'}}>
+   <div role="img" aria-label={`Scores over time, oldest to newest: ${recent.map(a=>a.feedback.score).join(', ')} out of 10`} style={{display:'flex',alignItems:'flex-end',gap:5,height:155,padding:'10px 8px 0',borderBottom:'1px solid #98a2b3',background:'var(--surface)',overflowX:'auto'}}>
     {recent.map((a,i)=><div key={a.id} title={`Attempt ${rows.length-recent.length+i+1}: ${a.feedback.score}/10 · ${new Date(a.created_at).toLocaleString()}`} style={{flex:'1 0 14px',maxWidth:45,minWidth:14,height:`${a.feedback.score*10}%`,background:'#2563eb',borderRadius:'4px 4px 0 0',position:'relative'}}>
-     <span style={{position:'absolute',top:-19,left:0,right:0,textAlign:'center',fontSize:11,color:'#344054'}}>{a.feedback.score}</span>
+     <span style={{position:'absolute',top:-19,left:0,right:0,textAlign:'center',fontSize:11,color:'var(--ink)'}}>{a.feedback.score}</span>
     </div>)}
    </div>
    <p style={{fontSize:12,color:'#475467'}}>Oldest → newest · last {recent.length} attempts · scores out of 10. Scores across different questions may not be directly comparable.</p>
