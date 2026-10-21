@@ -1,0 +1,2 @@
+alter table public.interviews add column if not exists target_seniority text not null default 'Auto-detect from role';
+alter table public.interviews add constraint interview_target_seniority_valid check (target_seniority in ('Auto-detect from role','Senior Product Manager','Staff Product Manager','Principal Product Manager','Group Product Manager','Director of Product Management','Senior Director of Product Management','VP of Product'));
