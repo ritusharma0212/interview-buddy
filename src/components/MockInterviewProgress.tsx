@@ -20,7 +20,7 @@ export function MockInterviewProgress({sessions,interviews}:{sessions:Session[];
  }).filter(i=>i.count>0);
  return <section className="mock-progress surface" aria-label="Mock interview progress dashboard">
   <h2>Mock Interview Progress</h2>
-  <p style={{fontSize:13,color:'#526681'}}>Track your completed mock interview assessments. Scores are AI estimates, not official interview results.</p>
+  <p style={{fontSize:13,color:'var(--muted)'}}>Track your completed mock interview assessments. Scores are AI estimates, not official interview results.</p>
   <label htmlFor="mock-progress-filter"><b>Interview: </b></label>
   <select id="mock-progress-filter" value={filter} onChange={e=>setFilter(e.target.value)}>
    <option value="all">All interviews</option>

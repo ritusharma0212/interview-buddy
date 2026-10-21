@@ -3,6 +3,7 @@ import {useState,type ReactNode} from 'react';
 import {useRouter} from 'next/navigation';
 import {MockInterview} from './MockInterview';
 import {CareerProfile} from './CareerProfile';
+import {ThemeToggle} from './ThemeToggle';
 import {seniorityLabel} from '@/lib/target-seniority';
 type Interview={id:string;company_name:string;role_title:string;interview_stage:string;target_seniority?:string};
 type MockSession={id:string;interview_id:string;status:string;started_at:string;assessment:{score?:number}|null};
@@ -29,7 +30,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
      <button type="button" aria-pressed={mode==='practice'} onClick={()=>{setMode('practice');setShowAddInterview(false)}}>Question Practice</button>
      <button type="button" aria-pressed={mode==='profile'} onClick={()=>{setMode('profile');setShowAddInterview(false)}}>My Profile</button>
     </nav>
-    <form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form>
+    <div className="app-header-actions"><ThemeToggle/><form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form></div>
    </div>
   </header>
   <div className="app-shell">
