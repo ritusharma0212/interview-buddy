@@ -140,3 +140,32 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 .interview-date-meta{color:#64748b;font-size:.85rem}
 .interview-summary-meta .seniority-pill{margin:0}
 .mock-panel summary .interview-stage-pill{margin:2px 6px}
+
+
+/* Optional dark theme. Light remains the default; users opt in per browser. */
+.app-header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.theme-toggle{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;background:var(--surface);border:1px solid var(--line);color:var(--ink);white-space:nowrap}
+.theme-toggle span:first-child{font-size:1.2rem;line-height:1}
+@media(max-width:640px){.app-header-actions{margin-left:auto}.theme-toggle{padding:8px 10px}}
+html[data-theme="dark"]{color-scheme:dark;--page:#0e1523;--surface:#192538;--ink:#eaf1fc;--muted:#a6b7d0;--line:#34465e;--primary:#9bc0ff;--primary-dark:#6c9ff4;--soft:#273b56;--shadow:0 2px 18px rgba(0,0,0,.25)}
+html[data-theme="dark"] body{background:var(--page)}
+html[data-theme="dark"] .app-header,html[data-theme="dark"] .app-signout button,html[data-theme="dark"] button:not([aria-pressed="true"]):not(.interview-delete-button):not([type="submit"]),html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{background:var(--surface);color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] label,html[data-theme="dark"] th,html[data-theme="dark"] .app-nav button,html[data-theme="dark"] .mock-progress-metric>div,html[data-theme="dark"] .interview-date-meta{color:var(--muted)}
+html[data-theme="dark"] .practice-workspaces>details,html[data-theme="dark"] .mock-panel>details,html[data-theme="dark"] .mock-panel section,html[data-theme="dark"] .mock-progress-metric,html[data-theme="dark"] .mock-progress-chart,html[data-theme="dark"] .mode-panel section[aria-label="Practice progress dashboard"],html[data-theme="dark"] .mode-panel section[aria-label="Practice progress dashboard"]>div[style*="grid-template-columns"]>div{background:var(--surface)!important;color:var(--ink)!important;border-color:var(--line)!important}
+html[data-theme="dark"] .dashboard-progress-tabs{background:var(--soft)}
+html[data-theme="dark"] .dashboard-progress-tabs button{color:var(--muted)}
+html[data-theme="dark"] .dashboard-progress-tabs button[aria-pressed="true"]{background:#304869!important;color:#cfe2ff!important}
+html[data-theme="dark"] .career-profile-import>div{background:#202f45;border-color:var(--line)}
+html[data-theme="dark"] .career-profile-import small,html[data-theme="dark"] .career-profile-note,html[data-theme="dark"] .career-profile-actions span{color:var(--muted)}
+html[data-theme="dark"] .seniority-pill{background:#243f63;color:#c7dfff;border-color:#40648d}
+html[data-theme="dark"] .interview-stage-pill{background:#3c2b59;color:#e0caff;border-color:#664a89}
+html[data-theme="dark"] .interview-status-not-started{background:#2a384b;color:#d0dbeb;border-color:#46566a}
+html[data-theme="dark"] .interview-status-in-progress{background:#51391f;color:#ffdb9e;border-color:#80603a}
+html[data-theme="dark"] .interview-status-complete{background:#1e493a;color:#a8efd0;border-color:#386d58}
+html[data-theme="dark"] .interview-delete-actions .interview-delete-button{background:#3a2530;color:#ffb4b4;border-color:#84515a}
+html[data-theme="dark"] .interview-delete-actions .interview-delete-button:hover:not(:disabled){background:#542d3b}
+html[data-theme="dark"] .interview-delete-actions [role="alert"]{color:#ffb4b4}
+html[data-theme="dark"] .dashboard-actions button,html[data-theme="dark"] .form-card button[type="submit"]{background:#3c70bf!important;border-color:#3c70bf!important;color:#fff!important}
+html[data-theme="dark"] .app-brand-mark{background:#3c70bf;color:#fff}
+html[data-theme="dark"] .mock-progress-bar span{color:var(--ink)}
+html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#93a6c1}
