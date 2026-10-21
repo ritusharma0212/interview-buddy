@@ -206,3 +206,11 @@ html[data-theme="dark"] .mock-progress-chart .mock-progress-bar span{color:#f1f6
 html[data-theme="dark"] .tour-card{background:#1d2c42}
 html[data-theme="dark"] .tour-actions .tour-next{background:#3974c8;color:#fff}
 @media(max-width:600px){.tour-card{padding:20px}.tour-actions{gap:6px}.tour-actions button{font-size:.85rem}}
+
+
+/* Saved question cards use the selected theme instead of hardcoded white. */
+html[data-theme="dark"] .saved-interview-card .saved-question-card{background:#23354d!important;color:#eaf1fc!important;border-color:#435c78!important}
+html[data-theme="dark"] .saved-interview-card .saved-question-card>summary{color:#f1f6ff!important}
+html[data-theme="dark"] .saved-interview-card .saved-question-card>div>div{background:#1b2a3e!important;border-color:#435c78!important;color:#eaf1fc!important}
+html[data-theme="dark"] .saved-interview-card .saved-question-card button[aria-pressed="true"]{background:#36557d!important;color:#fff!important}
+html[data-theme="dark"] .saved-interview-card .saved-question-card button[aria-pressed="false"]{background:#23354d!important;color:#eaf1fc!important}
