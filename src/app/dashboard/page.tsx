@@ -50,7 +50,7 @@ const mockStatus=(id:string):'Not started'|'In progress'|'Complete'=>{
  return sessions.length?'In progress':'Not started';
 };
 const workspace=<><h2>Saved interview workspaces</h2>{error&&<p role="alert">{error.message}</p>}{!data?.length&&<p>No interviews yet.</p>}{data?.map(x=><SavedInterviewWorkspace key={x.id} interview={x} status={practiceStatus(x.id)}/>)}</>;
-return <PreparationModes interviews={data??[]} mockSessions={mockSessions??[]} mockStatuses={Object.fromEntries((data??[]).map(i=>[i.id,mockStatus(i.id)]))}
+return <PreparationModes userId={user.id} interviews={data??[]} mockSessions={mockSessions??[]} mockStatuses={Object.fromEntries((data??[]).map(i=>[i.id,mockStatus(i.id)]))}
  dashboard={<><DashboardProgress attempts={history??[]} interviews={data??[]} sessions={mockSessions??[]} practiceError={Boolean(historyError)} mockError={Boolean(mockError)}/><div className="surface" style={{marginTop:20}}>{workspace}</div></>}
  addInterview={<div className="workspace-grid"> <div className="surface form-card"><NewInterview/></div><div className="surface practice-workspaces">{workspace}</div></div>}
  practice={<div className="surface practice-workspaces">{workspace}</div>}
