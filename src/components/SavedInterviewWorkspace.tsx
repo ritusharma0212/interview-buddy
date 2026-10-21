@@ -2,7 +2,7 @@
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {InterviewQuestions} from '@/components/InterviewQuestions';
-import {TARGET_SENIORITIES,seniorityLabel} from '@/lib/target-seniority';
+import {seniorityLabel} from '@/lib/target-seniority';
 
 type Interview={id:string;company_name:string;role_title:string;interview_stage:string;interview_at:string|null;target_seniority?:string};
 
@@ -31,23 +31,14 @@ export function SavedInterviewWorkspace({interview,status='Not started'}:{interv
   try{const response=await fetch('/api/interviews/'+interview.id,{method:'DELETE'});const result=await response.json();if(!response.ok)throw Error(result.error||'Delete failed');router.refresh();}
   catch(error){setDeleteError(error instanceof Error?error.message:'Could not delete interview');setDeleting(false)}
  }
- const [seniority,setSeniority]=useState(interview.target_seniority??'Auto-detect from role');
- const [saving,setSaving]=useState(false);
- const [message,setMessage]=useState('');
- async function updateSeniority(next:string){
-  setSaving(true);setMessage('');
-  try{const response=await fetch('/api/interviews/'+interview.id+'/seniority',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({target_seniority:next})});const result=await response.json();if(!response.ok)throw Error(result.error||'Update failed');setSeniority(result.target_seniority);setMessage('Saved. New questions and feedback will use this level.');}
-  catch(error){setMessage(error instanceof Error?error.message:'Update failed');}
-  finally{setSaving(false)}
- }
  return <details className="saved-interview-card" style={{border:'1px solid var(--line)',borderRadius:8,padding:14,margin:'10px 0',background:'var(--surface)'}}>
   <summary style={{cursor:'pointer',lineHeight:1.6}}>
    <strong>{interview.company_name} — {interview.role_title}</strong>
-   <span className="interview-summary-meta"><span className="interview-stage-pill">{interview.interview_stage}</span> <span className="interview-date-meta"><InterviewDate timestamp={interview.interview_at}/></span> <span className="seniority-pill">{seniorityLabel(seniority,interview.role_title).label} · {seniorityLabel(seniority,interview.role_title).source==='inferred'?'Inferred':seniorityLabel(seniority,interview.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span>
+   <span className="interview-summary-meta"><span className="interview-stage-pill">{interview.interview_stage}</span> <span className="interview-date-meta"><InterviewDate timestamp={interview.interview_at}/></span> <span className="seniority-pill">{seniorityLabel(interview.target_seniority??'Auto-detect from role',interview.role_title).label} · {seniorityLabel(interview.target_seniority??'Auto-detect from role',interview.role_title).source==='inferred'?'Inferred':seniorityLabel(interview.target_seniority??'Auto-detect from role',interview.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span>
    </span>
   </summary>
   <div style={{marginTop:14,borderTop:'1px solid #e5e7eb',paddingTop:12}}>
-   <div className="workspace-seniority"><label htmlFor={'seniority-'+interview.id}>Target seniority</label><select id={'seniority-'+interview.id} value={seniority} disabled={saving} onChange={event=>void updateSeniority(event.target.value)}>{TARGET_SENIORITIES.map(level=><option key={level} value={level}>{level}</option>)}</select>{message&&<small role="status">{message}</small>}</div>
+
    <InterviewQuestions interviewId={interview.id}/>
    <div className="interview-delete-actions"><button type="button" className="interview-delete-button" disabled={deleting} onClick={deleteInterview}>{deleting?'Deleting…':'Delete interview'}</button>{deleteError&&<span role="alert">{deleteError}</span>}</div>
   </div>
