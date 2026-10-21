@@ -133,3 +133,10 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 .seniority-pill{display:inline-flex;vertical-align:middle;align-items:center;background:#edf3fb;border:1px solid #d5e2f4;border-radius:999px;padding:3px 9px;color:#315fa8;font-size:.74rem;font-weight:600;line-height:1.4;margin:2px 4px;white-space:normal}.workspace-seniority{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.workspace-seniority select{width:min(100%,330px)}.workspace-seniority small{color:#526681}
 
 .interview-delete-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px;padding-top:14px;border-top:1px solid #e2e8f0}.interview-delete-actions .interview-delete-button{background:white;color:#b42318;border:1px solid #f0b8b2;border-radius:9px;padding:9px 14px;font-weight:600;cursor:pointer}.interview-delete-actions .interview-delete-button:hover:not(:disabled){background:#fff1f0}.interview-delete-actions .interview-delete-button:disabled{opacity:.55;cursor:wait}.interview-delete-actions [role="alert"]{color:#b42318;font-size:.85rem}
+
+/* Separate interview type from schedule and other metadata. */
+.interview-summary-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:5px 0 0 18px;font-size:14px;line-height:1.6}
+.interview-stage-pill{display:inline-flex;align-items:center;border:1px solid #e2d7f8;background:#f4edff;color:#6843a5;border-radius:999px;padding:3px 10px;font-size:.74rem;font-weight:650;line-height:1.4;vertical-align:middle;white-space:normal}
+.interview-date-meta{color:#64748b;font-size:.85rem}
+.interview-summary-meta .seniority-pill{margin:0}
+.mock-panel summary .interview-stage-pill{margin:2px 6px}
