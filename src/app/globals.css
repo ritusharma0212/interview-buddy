@@ -188,3 +188,21 @@ html[data-theme="dark"] .mode-panel section[aria-label="Practice progress dashbo
 html[data-theme="dark"] .mode-panel section[aria-label="Practice progress dashboard"] p{color:#b7c8e2!important}
 html[data-theme="dark"] .mock-progress-chart{background:#1d2c42!important}
 html[data-theme="dark"] .mock-progress-chart .mock-progress-bar span{color:#f1f6ff!important}
+
+
+/* First-visit walkthrough */
+.tour-backdrop{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.tour-shade{position:absolute;inset:0;background:rgba(8,17,32,.72)}
+.tour-highlight{position:fixed;border:3px solid #90baff;border-radius:12px;box-shadow:0 0 0 5px rgba(144,186,255,.25);pointer-events:none;z-index:1}
+.tour-card{position:relative;z-index:2;width:min(100%,510px);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:0 22px 70px rgba(0,0,0,.35)}
+.tour-count{font-size:.75rem;font-weight:750;letter-spacing:.08em;color:var(--primary);margin-bottom:12px}
+.tour-card h2{font-size:1.45rem;margin:0 0 12px;color:var(--ink)}
+.tour-card p{color:var(--muted);line-height:1.6;margin:0 0 22px}
+.tour-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.tour-actions button{border-radius:9px;padding:10px 12px;font-weight:650;cursor:pointer}
+.tour-actions .tour-skip{margin-right:auto;background:transparent;color:var(--muted);border:1px solid var(--line)}
+.tour-actions .tour-go{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.tour-actions .tour-next{background:#2864bd;color:white;border:1px solid #2864bd}
+html[data-theme="dark"] .tour-card{background:#1d2c42}
+html[data-theme="dark"] .tour-actions .tour-next{background:#3974c8;color:#fff}
+@media(max-width:600px){.tour-card{padding:20px}.tour-actions{gap:6px}.tour-actions button{font-size:.85rem}}
