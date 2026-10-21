@@ -2,9 +2,10 @@
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {InterviewQuestions} from '@/components/InterviewQuestions';
+import {EditInterview} from '@/components/EditInterview';
 import {seniorityLabel} from '@/lib/target-seniority';
 
-type Interview={id:string;company_name:string;role_title:string;interview_stage:string;interview_at:string|null;target_seniority?:string};
+type Interview={id:string;company_name:string;role_title:string;interview_stage:string;interview_at:string|null;target_seniority?:string;job_description?:string|null;recruiter_instructions?:string|null};
 
 function InterviewDate({timestamp}:{timestamp:string|null}){
  const [formatted,setFormatted]=useState<string|null>(null);
@@ -25,8 +26,9 @@ export function SavedInterviewWorkspace({interview,status='Not started'}:{interv
  const router=useRouter();
  const [deleting,setDeleting]=useState(false);
  const [deleteError,setDeleteError]=useState('');
+ const [confirmDelete,setConfirmDelete]=useState(false);
  async function deleteInterview(){
-  if(!window.confirm('Permanently delete '+interview.company_name+' — '+interview.role_title+'? This also deletes its generated questions, practice answers, feedback and mock interview history. This cannot be undone.'))return;
+  setConfirmDelete(false);
   setDeleting(true);setDeleteError('');
   try{const response=await fetch('/api/interviews/'+interview.id,{method:'DELETE'});const result=await response.json();if(!response.ok)throw Error(result.error||'Delete failed');router.refresh();}
   catch(error){setDeleteError(error instanceof Error?error.message:'Could not delete interview');setDeleting(false)}
@@ -40,7 +42,8 @@ export function SavedInterviewWorkspace({interview,status='Not started'}:{interv
   <div style={{marginTop:14,borderTop:'1px solid #e5e7eb',paddingTop:12}}>
 
    <InterviewQuestions interviewId={interview.id}/>
-   <div className="interview-delete-actions"><button type="button" className="interview-delete-button" disabled={deleting} onClick={deleteInterview}>{deleting?'Deleting…':'Delete interview'}</button>{deleteError&&<span role="alert">{deleteError}</span>}</div>
+   <div className="interview-delete-actions"><EditInterview interview={interview}/><button type="button" className="interview-delete-button" disabled={deleting} onClick={()=>setConfirmDelete(true)}>{deleting?'Deleting…':'Delete interview'}</button>{deleteError&&<span role="alert">{deleteError}</span>}</div>
+   {confirmDelete&&<div className="delete-confirm-backdrop" role="presentation"><div className="delete-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby={'delete-title-'+interview.id} aria-describedby={'delete-desc-'+interview.id}><h3 id={'delete-title-'+interview.id}>Delete this interview?</h3><p id={'delete-desc-'+interview.id}>Permanently delete <strong>{interview.company_name} — {interview.role_title}</strong>? All generated questions, practice answers, AI feedback, and mock interview history will also be deleted. This cannot be undone.</p><div className="delete-confirm-actions"><button type="button" onClick={()=>setConfirmDelete(false)}>Cancel — keep interview</button><button type="button" className="delete-confirm-danger" onClick={()=>void deleteInterview()}>Yes, delete permanently</button></div></div></div>}
   </div>
  </details>;
 }

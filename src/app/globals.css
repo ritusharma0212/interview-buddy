@@ -214,3 +214,25 @@ html[data-theme="dark"] .saved-interview-card .saved-question-card>summary{color
 html[data-theme="dark"] .saved-interview-card .saved-question-card>div>div{background:#1b2a3e!important;border-color:#435c78!important;color:#eaf1fc!important}
 html[data-theme="dark"] .saved-interview-card .saved-question-card button[aria-pressed="true"]{background:#36557d!important;color:#fff!important}
 html[data-theme="dark"] .saved-interview-card .saved-question-card button[aria-pressed="false"]{background:#23354d!important;color:#eaf1fc!important}
+
+
+/* Edit saved interview details and prevent accidental deletion. */
+.edit-interview{display:flex;flex-direction:column;gap:8px;min-width:0}
+.edit-interview>button{padding:9px 14px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:650;cursor:pointer}
+.edit-interview-form{display:grid;gap:12px;width:min(100%,650px);padding:18px;border:1px solid var(--line);background:var(--surface);border-radius:12px;color:var(--ink)}
+.edit-interview-form h3{margin:0}
+.edit-interview-form label{display:grid;gap:6px;font-weight:600}
+.edit-interview-form input,.edit-interview-form select,.edit-interview-form textarea{width:100%;box-sizing:border-box;padding:10px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px}
+.edit-interview-hint{font-size:.85rem;color:var(--muted);margin:0}
+.edit-interview-actions{display:flex;flex-wrap:wrap;gap:10px}
+.edit-interview-actions button{padding:9px 14px;border-radius:8px;border:1px solid var(--line);cursor:pointer}
+.edit-interview-actions button[type="submit"]{background:#2864bd;color:#fff;border-color:#2864bd}
+.delete-confirm-backdrop{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(7,15,30,.72);padding:20px}
+.delete-confirm-dialog{width:min(100%,480px);padding:24px;border-radius:16px;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:0 20px 70px rgba(0,0,0,.3)}
+.delete-confirm-dialog h3{margin:0 0 12px}
+.delete-confirm-dialog p{line-height:1.6;color:var(--muted)}
+.delete-confirm-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;margin-top:22px}
+.delete-confirm-actions button{padding:10px 14px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);cursor:pointer;font-weight:650}
+.delete-confirm-actions .delete-confirm-danger{background:#b42318!important;color:white!important;border-color:#b42318!important}
+html[data-theme="dark"] .edit-interview-form,html[data-theme="dark"] .delete-confirm-dialog{background:#1d2c42}
+html[data-theme="dark"] .edit-interview-actions button[type="submit"]{background:#3974c8!important;color:#fff!important}
