@@ -7,7 +7,7 @@ import {CareerProfile} from './CareerProfile';
 import {ThemeToggle} from './ThemeToggle';
 import {GuidedTour} from './GuidedTour';
 import {seniorityLabel} from '@/lib/target-seniority';
-type Interview={id:string;company_name:string;role_title:string;interview_stage:string;target_seniority?:string;interview_at?:string|null;job_description?:string|null;recruiter_instructions?:string|null};
+type Interview={id:string;company_name:string;role_title:string;interview_stage:string;target_seniority?:string;interview_at:string|null;job_description?:string|null;recruiter_instructions?:string|null};
 type MockSession={id:string;interview_id:string;status:string;started_at:string;assessment:{score?:number}|null};
 type InterviewStatus='Not started'|'In progress'|'Complete';
 export function PreparationModes({dashboard,practice,addInterview,interviews,mockSessions,mockStatuses,userId}:{dashboard:ReactNode;practice:ReactNode;addInterview:ReactNode;interviews:Interview[];mockSessions:MockSession[];mockStatuses:Record<string,InterviewStatus>;userId:string}){
