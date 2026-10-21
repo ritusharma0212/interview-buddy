@@ -1,30 +1,30 @@
 'use client';
-import {useEffect,useState} from 'react';
+import {useEffect,useRef,useState} from 'react';
 export function CareerProfile(){
  const [text,setText]=useState('');
- const [url,setUrl]=useState('https://ritusharma0212.github.io/personalpm/profile.html');
- const [file,setFile]=useState<File|null>(null);
+ const [url,setUrl]=useState('');
+ const pdfInput=useRef<HTMLInputElement>(null);
  const [loading,setLoading]=useState(true);
  const [working,setWorking]=useState(false);
  const [message,setMessage]=useState('');
  const [saved,setSaved]=useState(false);
  useEffect(()=>{
   let live=true;
-  fetch('/api/profile').then(async r=>{const d=await r.json();if(!r.ok)throw Error(d.error);if(live){setText(d.profile?.profile_text??'');setUrl(d.profile?.source_url??'https://ritusharma0212.github.io/personalpm/profile.html');setSaved(Boolean(d.profile?.profile_text));}})
+  fetch('/api/profile').then(async r=>{const d=await r.json();if(!r.ok)throw Error(d.error);if(live){setText((d.profile?.profile_text??'').replace(/\\n/g,'\n'));setUrl(d.profile?.source_url??'');setSaved(Boolean(d.profile?.profile_text));}})
    .catch(e=>{if(live)setMessage(e.message||'Could not load profile')}).finally(()=>{if(live)setLoading(false)});
   return ()=>{live=false};
  },[]);
- async function importProfile(kind:'pdf'|'url'){
+ async function importProfile(kind:'pdf'|'url',selectedFile?:File){
   setWorking(true);setMessage('');
   try{
    const form=new FormData();
-   if(kind==='pdf'){if(!file)throw Error('Choose a PDF first');form.set('file',file)}
+   if(kind==='pdf'){if(!selectedFile)throw Error('Choose a PDF first');form.set('file',selectedFile)}
    else form.set('url',url);
    const r=await fetch('/api/profile/import',{method:'POST',body:form});
    const d=await r.json();
    if(!r.ok)throw Error(d.error||'Import failed');
    if(text.trim()&&!window.confirm('Replace the current editor text with the imported draft? Unsaved edits will be lost.'))return;
-   setText(d.profile_text);setSaved(false);
+   setText(d.profile_text.replace(/\\n/g,'\n'));setSaved(false);
    setMessage('Draft imported. Review and edit the details, then click Save profile.');
   }catch(e){setMessage(e instanceof Error?e.message:'Import failed')}
   finally{setWorking(false)}
@@ -45,15 +45,15 @@ export function CareerProfile(){
   <div className="career-profile-import">
    <div>
     <label htmlFor="profile-pdf">LinkedIn or resume PDF</label>
-    <input id="profile-pdf" type="file" accept=".pdf,application/pdf" onChange={e=>setFile(e.target.files?.[0]??null)}/>
-    <button type="button" onClick={()=>importProfile('pdf')} disabled={working||loading||!file}>Import PDF</button>
+    <input ref={pdfInput} id="profile-pdf" type="file" accept=".pdf,application/pdf" style={{display:'none'}} aria-label="Select resume or LinkedIn PDF" onChange={e=>{const selected=e.target.files?.[0];if(selected)void importProfile('pdf',selected);e.target.value=''}}/>
+    <button type="button" onClick={()=>pdfInput.current?.click()} disabled={working||loading}>{working?'Importing…':'Choose & import PDF'}</button>
     <small>PDF only, maximum 5 MB. The PDF is processed for extraction but not stored.</small>
    </div>
    <div>
     <label htmlFor="profile-url">Personal website URL</label>
-    <input id="profile-url" type="url" value={url} onChange={e=>{setUrl(e.target.value);setSaved(false)}}/>
+    <input id="profile-url" type="url" placeholder="https://sites.google.com/view/your-profile" value={url} onChange={e=>{setUrl(e.target.value);setSaved(false)}}/>
     <button type="button" onClick={()=>importProfile('url')} disabled={working||loading||!url.trim()}>Import website</button>
-    <small>Currently supports public GitHub Pages (github.io) HTML pages.</small>
+    <small>Supports public GitHub Pages and Google Sites pages. Private pages cannot be imported.</small>
    </div>
   </div>
   <label htmlFor="profile-editor">Your career profile — review and edit before saving</label>
