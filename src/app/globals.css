@@ -111,3 +111,21 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 }
 
 .career-profile{max-width:1100px;margin:0 auto}.career-profile>p{color:var(--muted)}.career-profile-import{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0}.career-profile-import>div{display:grid;gap:10px;align-content:start;background:#f8fafd;border:1px solid var(--line);border-radius:14px;padding:18px}.career-profile-import input{width:100%;min-width:0}.career-profile-import button{justify-self:start}.career-profile-import small,.career-profile-note{color:#61718e;font-size:.82rem}.career-profile>label{display:block;margin:18px 0 8px}.career-profile>textarea{width:100%;resize:vertical;line-height:1.6}.career-profile-actions{display:flex;align-items:center;gap:16px;margin-top:14px}.career-profile-actions button{background:var(--primary);color:white;border-color:var(--primary)}.career-profile-actions span{font-size:.85rem;color:#61718e}@media(max-width:720px){.career-profile-import{grid-template-columns:1fr}}
+
+/* Add Interview: keep seniority, stage and date in distinct grid cells. */
+.form-card form > label:has(select[name="target_seniority"]){grid-column:1/-1;grid-row:3;display:grid;gap:7px;min-width:0}
+.form-card form > label:has(select[name="target_seniority"]) select{width:100%;min-width:0}
+.form-card form > select[name="interview_stage"]{grid-column:1;grid-row:4}
+.form-card form > label:has(input[name="interview_at"]){grid-column:2;grid-row:4;display:grid;gap:7px;min-width:0}
+.form-card form > label:has(input[name="interview_at"]) input{width:100%;min-width:0;margin-top:0}
+.form-card form > textarea[name="job_description"]{grid-row:5}
+.form-card form > textarea[name="recruiter_instructions"]{grid-row:6}
+.form-card form > button[type="submit"]{grid-row:7}
+@media(max-width:640px){
+ .form-card form > label:has(select[name="target_seniority"]),
+ .form-card form > label:has(input[name="interview_at"]),
+ .form-card form > select[name="interview_stage"],
+ .form-card form > textarea[name="job_description"],
+ .form-card form > textarea[name="recruiter_instructions"],
+ .form-card form > button[type="submit"]{grid-column:1;grid-row:auto}
+}
