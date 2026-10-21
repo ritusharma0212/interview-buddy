@@ -169,3 +169,22 @@ html[data-theme="dark"] .dashboard-actions button,html[data-theme="dark"] .form-
 html[data-theme="dark"] .app-brand-mark{background:#3c70bf;color:#fff}
 html[data-theme="dark"] .mock-progress-bar span{color:var(--ink)}
 html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#93a6c1}
+
+
+/* Fix contrast in dark-mode interview cards and progress visualizations. */
+html[data-theme="dark"] .saved-interview-card,
+html[data-theme="dark"] .practice-workspaces .saved-interview-card,
+html[data-theme="dark"] .dashboard-home .saved-interview-card{background:#1d2c42!important;border-color:#40546d!important;color:#eaf1fc!important}
+html[data-theme="dark"] .saved-interview-card summary,
+html[data-theme="dark"] .saved-interview-card summary strong,
+html[data-theme="dark"] .saved-interview-card summary::marker{color:#f1f6ff!important}
+html[data-theme="dark"] .saved-interview-card .interview-date-meta{color:#b7c8e2!important}
+html[data-theme="dark"] .saved-interview-card>div{border-color:#40546d!important}
+html[data-theme="dark"] .practice-workspaces details:not(.saved-interview-card){background:var(--surface)!important;color:var(--ink)!important}
+html[data-theme="dark"] .mode-panel section[aria-label="Practice progress dashboard"] [role="img"]{background:#1d2c42!important;color:#eaf1fc!important;border-color:#52657e!important}
+html[data-theme="dark"] .mode-panel section[aria-label="Practice progress dashboard"] [role="img"] span{color:#f1f6ff!important}
+html[data-theme="dark"] .mode-panel section[aria-label="Practice progress dashboard"]>div[style*="grid-template-columns"]>div{background:#1d2c42!important;color:#eaf1fc!important}
+html[data-theme="dark"] .mode-panel section[aria-label="Practice progress dashboard"]>div[style*="grid-template-columns"]>div div:first-child{color:#b7c8e2!important}
+html[data-theme="dark"] .mode-panel section[aria-label="Practice progress dashboard"] p{color:#b7c8e2!important}
+html[data-theme="dark"] .mock-progress-chart{background:#1d2c42!important}
+html[data-theme="dark"] .mock-progress-chart .mock-progress-bar span{color:#f1f6ff!important}
