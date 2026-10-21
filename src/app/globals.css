@@ -109,3 +109,5 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
  .dashboard-home .dashboard-actions{position:static;margin-bottom:12px}
  .dashboard-home .dashboard-progress-heading{gap:12px;padding-right:0}
 }
+
+.career-profile{max-width:1100px;margin:0 auto}.career-profile>p{color:var(--muted)}.career-profile-import{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0}.career-profile-import>div{display:grid;gap:10px;align-content:start;background:#f8fafd;border:1px solid var(--line);border-radius:14px;padding:18px}.career-profile-import input{width:100%;min-width:0}.career-profile-import button{justify-self:start}.career-profile-import small,.career-profile-note{color:#61718e;font-size:.82rem}.career-profile>label{display:block;margin:18px 0 8px}.career-profile>textarea{width:100%;resize:vertical;line-height:1.6}.career-profile-actions{display:flex;align-items:center;gap:16px;margin-top:14px}.career-profile-actions button{background:var(--primary);color:white;border-color:var(--primary)}.career-profile-actions span{font-size:.85rem;color:#61718e}@media(max-width:720px){.career-profile-import{grid-template-columns:1fr}}
