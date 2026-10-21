@@ -129,3 +129,5 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
  .form-card form > textarea[name="recruiter_instructions"],
  .form-card form > button[type="submit"]{grid-column:1;grid-row:auto}
 }
+
+.seniority-pill{display:inline-flex;vertical-align:middle;align-items:center;background:#edf3fb;border:1px solid #d5e2f4;border-radius:999px;padding:3px 9px;color:#315fa8;font-size:.74rem;font-weight:600;line-height:1.4;margin:2px 4px;white-space:normal}.workspace-seniority{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.workspace-seniority select{width:min(100%,330px)}.workspace-seniority small{color:#526681}
