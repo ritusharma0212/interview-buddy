@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useState} from 'react';
+import {useRouter} from 'next/navigation';
 import {InterviewQuestions} from '@/components/InterviewQuestions';
 import {TARGET_SENIORITIES,seniorityLabel} from '@/lib/target-seniority';
 
@@ -21,6 +22,15 @@ function InterviewDate({timestamp}:{timestamp:string|null}){
 }
 
 export function SavedInterviewWorkspace({interview,status='Not started'}:{interview:Interview;status?:'Not started'|'In progress'|'Complete'}){
+ const router=useRouter();
+ const [deleting,setDeleting]=useState(false);
+ const [deleteError,setDeleteError]=useState('');
+ async function deleteInterview(){
+  if(!window.confirm('Permanently delete '+interview.company_name+' — '+interview.role_title+'? This also deletes its generated questions, practice answers, feedback and mock interview history. This cannot be undone.'))return;
+  setDeleting(true);setDeleteError('');
+  try{const response=await fetch('/api/interviews/'+interview.id,{method:'DELETE'});const result=await response.json();if(!response.ok)throw Error(result.error||'Delete failed');router.refresh();}
+  catch(error){setDeleteError(error instanceof Error?error.message:'Could not delete interview');setDeleting(false)}
+ }
  const [seniority,setSeniority]=useState(interview.target_seniority??'Auto-detect from role');
  const [saving,setSaving]=useState(false);
  const [message,setMessage]=useState('');
@@ -33,13 +43,13 @@ export function SavedInterviewWorkspace({interview,status='Not started'}:{interv
  return <details style={{border:'1px solid #ddd',borderRadius:8,padding:14,margin:'10px 0',background:'white'}}>
   <summary style={{cursor:'pointer',lineHeight:1.6}}>
    <strong>{interview.company_name} — {interview.role_title}</strong>
-   <span style={{display:'block',marginLeft:18,fontSize:14}}> 
-    {interview.interview_stage} · <InterviewDate timestamp={interview.interview_at}/> <span className="seniority-pill">{seniorityLabel(seniority,interview.role_title).label} · {seniorityLabel(seniority,interview.role_title).source==='inferred'?'Inferred':seniorityLabel(seniority,interview.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span>
+   <span className="interview-summary-meta"><span className="interview-stage-pill">{interview.interview_stage}</span> <span className="interview-date-meta"><InterviewDate timestamp={interview.interview_at}/></span> <span className="seniority-pill">{seniorityLabel(seniority,interview.role_title).label} · {seniorityLabel(seniority,interview.role_title).source==='inferred'?'Inferred':seniorityLabel(seniority,interview.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span>
    </span>
   </summary>
   <div style={{marginTop:14,borderTop:'1px solid #e5e7eb',paddingTop:12}}>
    <div className="workspace-seniority"><label htmlFor={'seniority-'+interview.id}>Target seniority</label><select id={'seniority-'+interview.id} value={seniority} disabled={saving} onChange={event=>void updateSeniority(event.target.value)}>{TARGET_SENIORITIES.map(level=><option key={level} value={level}>{level}</option>)}</select>{message&&<small role="status">{message}</small>}</div>
    <InterviewQuestions interviewId={interview.id}/>
+   <div className="interview-delete-actions"><button type="button" className="interview-delete-button" disabled={deleting} onClick={deleteInterview}>{deleting?'Deleting…':'Delete interview'}</button>{deleteError&&<span role="alert">{deleteError}</span>}</div>
   </div>
  </details>;
 }

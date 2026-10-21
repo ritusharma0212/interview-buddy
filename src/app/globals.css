@@ -78,7 +78,7 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 
 .dashboard-actions{display:flex;justify-content:flex-end;margin-bottom:12px}.dashboard-actions button{background:var(--primary);border-color:var(--primary);color:#fff;padding:11px 19px;box-shadow:0 4px 12px rgba(49,95,168,.15)}.dashboard-actions button:hover:not(:disabled){background:var(--primary-dark);color:#fff}.mode-panel[hidden]{display:none!important}
 
-.workspace-summary-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}.workspace-summary-heading strong{min-width:0}.interview-status{display:inline-flex;align-items:center;white-space:nowrap;font-size:.74rem;font-weight:650;line-height:1.4;border-radius:999px;padding:4px 10px;border:1px solid transparent}.interview-status-not-started{background:#f1f5f9;color:#526681;border-color:#e2e8f0}.interview-status-in-progress{background:#eaf2ff;color:#315fa8;border-color:#cbdcf6}.interview-status-complete{background:#e8f7ef;color:#147a4b;border-color:#c6ebd6}
+.workspace-summary-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}.workspace-summary-heading strong{min-width:0}.interview-status{display:inline-flex;align-items:center;white-space:nowrap;font-size:.74rem;font-weight:650;line-height:1.4;border-radius:999px;padding:4px 10px;border:1px solid transparent}.interview-status-not-started{background:#f1f5f9;color:#526681;border-color:#e2e8f0}.interview-status-in-progress{background:#fff2df;color:#995000;border-color:#f5d7a5}.interview-status-complete{background:#e8f7ef;color:#147a4b;border-color:#c6ebd6}
 
 .mock-progress{margin:0 0 22px}.mock-progress select{margin-left:8px;max-width:100%}.mock-progress-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 24px}.mock-progress-metric{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}.mock-progress-metric>div{font-size:.82rem;color:#526681}.mock-progress-metric strong{display:block;font-size:1.65rem;line-height:1.4;color:var(--ink)}.mock-progress-chart{display:flex;align-items:flex-end;gap:9px;height:190px;padding:24px 12px 0;border-bottom:1px solid var(--line);overflow-x:auto;background:#fff}.mock-progress-bar{flex:1 0 18px;max-width:54px;min-width:18px;position:relative;border-radius:6px 6px 0 0}.mock-progress-bar span{position:absolute;top:-23px;left:0;right:0;text-align:center;font-size:12px;font-weight:650;color:var(--ink)}@media(max-width:720px){.mock-progress-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mock-progress-metric{padding:12px}}
 
@@ -131,3 +131,12 @@ th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line)}
 }
 
 .seniority-pill{display:inline-flex;vertical-align:middle;align-items:center;background:#edf3fb;border:1px solid #d5e2f4;border-radius:999px;padding:3px 9px;color:#315fa8;font-size:.74rem;font-weight:600;line-height:1.4;margin:2px 4px;white-space:normal}.workspace-seniority{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.workspace-seniority select{width:min(100%,330px)}.workspace-seniority small{color:#526681}
+
+.interview-delete-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px;padding-top:14px;border-top:1px solid #e2e8f0}.interview-delete-actions .interview-delete-button{background:white;color:#b42318;border:1px solid #f0b8b2;border-radius:9px;padding:9px 14px;font-weight:600;cursor:pointer}.interview-delete-actions .interview-delete-button:hover:not(:disabled){background:#fff1f0}.interview-delete-actions .interview-delete-button:disabled{opacity:.55;cursor:wait}.interview-delete-actions [role="alert"]{color:#b42318;font-size:.85rem}
+
+/* Separate interview type from schedule and other metadata. */
+.interview-summary-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:5px 0 0 18px;font-size:14px;line-height:1.6}
+.interview-stage-pill{display:inline-flex;align-items:center;border:1px solid #e2d7f8;background:#f4edff;color:#6843a5;border-radius:999px;padding:3px 10px;font-size:.74rem;font-weight:650;line-height:1.4;vertical-align:middle;white-space:normal}
+.interview-date-meta{color:#64748b;font-size:.85rem}
+.interview-summary-meta .seniority-pill{margin:0}
+.mock-panel summary .interview-stage-pill{margin:2px 6px}
