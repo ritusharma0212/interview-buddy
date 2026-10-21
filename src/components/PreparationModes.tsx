@@ -1,11 +1,13 @@
 'use client';
 import {useState,type ReactNode} from 'react';
 import {MockInterview} from './MockInterview';
-type Interview={id:string;company_name:string;role_title:string;interview_stage:string};
+import {CareerProfile} from './CareerProfile';
+import {seniorityLabel} from '@/lib/target-seniority';
+type Interview={id:string;company_name:string;role_title:string;interview_stage:string;target_seniority?:string};
 type MockSession={id:string;interview_id:string;status:string;started_at:string;assessment:{score?:number}|null};
 type InterviewStatus='Not started'|'In progress'|'Complete';
 export function PreparationModes({dashboard,practice,addInterview,interviews,mockSessions,mockStatuses}:{dashboard:ReactNode;practice:ReactNode;addInterview:ReactNode;interviews:Interview[];mockSessions:MockSession[];mockStatuses:Record<string,InterviewStatus>}){
- const [mode,setMode]=useState<'dashboard'|'practice'|'mock'>('dashboard');
+ const [mode,setMode]=useState<'dashboard'|'practice'|'mock'|'profile'>('dashboard');
  const [showAddInterview,setShowAddInterview]=useState(false);
  return <>
   <header className="app-header">
@@ -15,6 +17,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
      <button type="button" aria-pressed={mode==='dashboard'} onClick={()=>{setMode('dashboard');setShowAddInterview(false)}}>Dashboard</button>
      <button type="button" aria-pressed={mode==='mock'} onClick={()=>{setMode('mock');setShowAddInterview(false)}}>Mock Interview</button>
      <button type="button" aria-pressed={mode==='practice'} onClick={()=>{setMode('practice');setShowAddInterview(false)}}>Question Practice</button>
+     <button type="button" aria-pressed={mode==='profile'} onClick={()=>{setMode('profile');setShowAddInterview(false)}}>My Profile</button>
     </nav>
     <form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form>
    </div>
@@ -24,11 +27,12 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
    <div hidden={mode!=='practice'} className="mode-panel">
     {practice}
    </div>
+   {mode==='profile'&&<CareerProfile/>}
    {mode==='mock'&&<section className="mode-panel mock-panel">
     <h2>Mock Interview</h2>
     {interviews.length===0?<p>Create an interview workspace under Question Practice first.</p>:
      interviews.map(i=><details key={i.id}>
-      <summary><b>{i.company_name} — {i.role_title}</b> · {i.interview_stage} <span className={`interview-status interview-status-${(mockStatuses[i.id]??'Not started').toLowerCase().replace(' ','-')}`}>{mockStatuses[i.id]??'Not started'}</span></summary>
+      <summary><b>{i.company_name} — {i.role_title}</b> · {i.interview_stage} <span className="seniority-pill">{seniorityLabel(i.target_seniority,i.role_title).label} · {seniorityLabel(i.target_seniority,i.role_title).source==='inferred'?'Inferred':seniorityLabel(i.target_seniority,i.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${(mockStatuses[i.id]??'Not started').toLowerCase().replace(' ','-')}`}>{mockStatuses[i.id]??'Not started'}</span></summary>
       <MockInterview interviewId={i.id}/>
      </details>)}
    </section>}

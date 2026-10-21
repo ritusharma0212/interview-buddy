@@ -8,7 +8,7 @@ export async function mockContext(interviewId:string){
  const {data:{user}}=await db.auth.getUser();
  if(!user)return {error:NextResponse.json({error:'Please sign in'},{status:401})};
  const {data:interview}=await db.from('interviews')
-  .select('id,company_name,role_title,interview_stage,job_description,recruiter_instructions')
+  .select('id,company_name,role_title,interview_stage,target_seniority,job_description,recruiter_instructions')
   .eq('id',interviewId).eq('user_id',user.id).maybeSingle();
  if(!interview)return {error:NextResponse.json({error:'Interview not found'},{status:404})};
  if(!process.env.SUPABASE_SERVICE_ROLE_KEY)return {error:NextResponse.json({error:'Mock Interview storage is not configured.'},{status:503})};
