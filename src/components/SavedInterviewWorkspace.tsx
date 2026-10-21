@@ -2,9 +2,10 @@
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {InterviewQuestions} from '@/components/InterviewQuestions';
+import {EditInterview} from '@/components/EditInterview';
 import {seniorityLabel} from '@/lib/target-seniority';
 
-type Interview={id:string;company_name:string;role_title:string;interview_stage:string;interview_at:string|null;target_seniority?:string};
+type Interview={id:string;company_name:string;role_title:string;interview_stage:string;interview_at:string|null;target_seniority?:string;job_description?:string|null;recruiter_instructions?:string|null};
 
 function InterviewDate({timestamp}:{timestamp:string|null}){
  const [formatted,setFormatted]=useState<string|null>(null);
@@ -40,7 +41,7 @@ export function SavedInterviewWorkspace({interview,status='Not started'}:{interv
   <div style={{marginTop:14,borderTop:'1px solid #e5e7eb',paddingTop:12}}>
 
    <InterviewQuestions interviewId={interview.id}/>
-   <div className="interview-delete-actions"><button type="button" className="interview-delete-button" disabled={deleting} onClick={deleteInterview}>{deleting?'Deleting…':'Delete interview'}</button>{deleteError&&<span role="alert">{deleteError}</span>}</div>
+   <div className="interview-delete-actions"><EditInterview interview={interview}/><button type="button" className="interview-delete-button" disabled={deleting} onClick={deleteInterview}>{deleting?'Deleting…':'Delete interview'}</button>{deleteError&&<span role="alert">{deleteError}</span>}</div>
   </div>
  </details>;
 }
