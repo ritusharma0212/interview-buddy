@@ -65,22 +65,22 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
    {error&&<p role="alert" style={{color:'crimson'}}>{error}</p>}
    {set&&<div><p><small>AI-generated practice questions based on your saved job description and stage; not verified company interview questions.</small></p>
      <ol style={{paddingLeft:24}}>{set.questions.map((q,index)=><li key={index} style={{marginBottom:10}}>
-       <details style={{border:'1px solid #cbd5e1',borderRadius:8,padding:'12px 14px',background:'white'}}>
+       <details className="saved-question-card" style={{border:'1px solid var(--line)',borderRadius:8,padding:'12px 14px',background:'var(--surface)',color:'var(--ink)'}}>
         <summary style={{cursor:'pointer',fontWeight:600,lineHeight:1.5}}>{q.question}</summary>
         <div style={{marginTop:12}}>
        <p><b>Competency:</b> {q.competency}</p>
        <details><summary>Why it matters and how to answer</summary>
          <p>{q.why_this_matters}</p><p>{q.answer_guidance}</p>
        </details>
-       <div style={{marginTop:12,padding:12,background:'#f8f9fa',border:'1px solid #ddd',borderRadius:6}}>
+       <div style={{marginTop:12,padding:12,background:'var(--soft)',border:'1px solid var(--line)',borderRadius:6}}>
         <p style={{fontWeight:600,margin:'0 0 8px'}}>How would you like to answer?</p>
         <div role="group" aria-label={`Answer method for question ${index+1}`} style={{display:'flex',gap:8,marginBottom:10}}>
          <button type="button" aria-pressed={(answerModes[index]??'type')==='type'}
           onClick={()=>setAnswerModes(p=>({...p,[index]:'type'}))}
-          style={{padding:'7px 14px',borderRadius:6,background:(answerModes[index]??'type')==='type'?'#dbeafe':'white',border:'1px solid #94a3b8'}}>⌨️ Type</button>
+          style={{padding:'7px 14px',borderRadius:6,background:(answerModes[index]??'type')==='type'?'var(--soft)':'var(--surface)',border:'1px solid #94a3b8'}}>⌨️ Type</button>
          <button type="button" aria-pressed={answerModes[index]==='speak'}
           onClick={()=>setAnswerModes(p=>({...p,[index]:'speak'}))}
-          style={{padding:'7px 14px',borderRadius:6,background:answerModes[index]==='speak'?'#dbeafe':'white',border:'1px solid #94a3b8'}}>🎙️ Speak</button>
+          style={{padding:'7px 14px',borderRadius:6,background:answerModes[index]==='speak'?'var(--soft)':'var(--surface)',border:'1px solid #94a3b8'}}>🎙️ Speak</button>
         </div>
         {(answerModes[index]??'type')==='type'?<>
          <label htmlFor={`practice-${interviewId}-${index}`}><b>Type your answer</b></label>
