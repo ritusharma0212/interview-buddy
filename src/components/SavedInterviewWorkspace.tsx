@@ -43,8 +43,7 @@ export function SavedInterviewWorkspace({interview,status='Not started'}:{interv
  return <details style={{border:'1px solid #ddd',borderRadius:8,padding:14,margin:'10px 0',background:'white'}}>
   <summary style={{cursor:'pointer',lineHeight:1.6}}>
    <strong>{interview.company_name} — {interview.role_title}</strong>
-   <span style={{display:'block',marginLeft:18,fontSize:14}}> 
-    {interview.interview_stage} · <InterviewDate timestamp={interview.interview_at}/> <span className="seniority-pill">{seniorityLabel(seniority,interview.role_title).label} · {seniorityLabel(seniority,interview.role_title).source==='inferred'?'Inferred':seniorityLabel(seniority,interview.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span>
+   <span className="interview-summary-meta"><span className="interview-stage-pill">{interview.interview_stage}</span> <span className="interview-date-meta"><InterviewDate timestamp={interview.interview_at}/></span> <span className="seniority-pill">{seniorityLabel(seniority,interview.role_title).label} · {seniorityLabel(seniority,interview.role_title).source==='inferred'?'Inferred':seniorityLabel(seniority,interview.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${status.toLowerCase().replace(' ','-')}`}>{status}</span>
    </span>
   </summary>
   <div style={{marginTop:14,borderTop:'1px solid #e5e7eb',paddingTop:12}}>
