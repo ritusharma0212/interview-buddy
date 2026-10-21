@@ -42,7 +42,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
     <h2>Mock Interview</h2>
     {interviews.length===0?<p>Create an interview workspace under Question Practice first.</p>:
      interviews.map(i=><details key={i.id}>
-      <summary><b>{i.company_name} — {i.role_title}</b> · {i.interview_stage} <span className="seniority-pill">{seniorityLabel(i.target_seniority,i.role_title).label} · {seniorityLabel(i.target_seniority,i.role_title).source==='inferred'?'Inferred':seniorityLabel(i.target_seniority,i.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${(mockStatuses[i.id]??'Not started').toLowerCase().replace(' ','-')}`}>{mockStatuses[i.id]??'Not started'}</span></summary>
+      <summary><b>{i.company_name} — {i.role_title}</b> <span className="interview-stage-pill">{i.interview_stage}</span> <span className="seniority-pill">{seniorityLabel(i.target_seniority,i.role_title).label} · {seniorityLabel(i.target_seniority,i.role_title).source==='inferred'?'Inferred':seniorityLabel(i.target_seniority,i.role_title).source==='selected'?'Selected':'Auto'}</span> <span className={`interview-status interview-status-${(mockStatuses[i.id]??'Not started').toLowerCase().replace(' ','-')}`}>{mockStatuses[i.id]??'Not started'}</span></summary>
       <MockInterview interviewId={i.id}/>
       <div className="interview-delete-actions"><button type="button" className="interview-delete-button" disabled={deletingId===i.id} onClick={()=>void deleteInterview(i)}>{deletingId===i.id?'Deleting…':'Delete interview'}</button>{deleteError[i.id]&&<span role="alert">{deleteError[i.id]}</span>}</div>
      </details>)}
