@@ -28,7 +28,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
  return <>
   <header className="app-header">
    <div className="app-header-inner">
-    <div className="app-brand"><span className="app-brand-mark" aria-hidden="true">✦</span>Interview Buddy</div>
+    <div className="app-brand"><img className="app-brand-mark" src="/interview-buddy-logo.svg" alt="" aria-hidden="true"/>Interview Buddy</div>
     <nav className="app-nav" aria-label="Preparation navigation">
      <button type="button" aria-pressed={mode==='dashboard'} onClick={()=>{setMode('dashboard');setShowAddInterview(false)}}>Dashboard</button>
      <button data-tour="mock" type="button" aria-pressed={mode==='mock'} onClick={()=>{setMode('mock');setShowAddInterview(false)}}>Mock Interview</button>
