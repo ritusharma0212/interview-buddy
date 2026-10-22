@@ -11,7 +11,7 @@ export function FeedbackWidget(){
  const [error,setError]=useState('');
  const [sent,setSent]=useState(false);
  async function submit(event:React.FormEvent<HTMLFormElement>){
-  event.preventDefault();setBusy(true);setError('');
+  event.preventDefault();if(rating===null){setError('Please select a star rating.');return}setBusy(true);setError('');
   try{
    const response=await fetch('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category,message,rating,page:window.location.pathname})});
    const result=await response.json();
@@ -28,11 +28,11 @@ export function FeedbackWidget(){
     {sent?<div className="feedback-success" role="status"><h3>Thank you for your feedback!</h3><p>Your feedback has been saved. We appreciate you helping make Interview Buddy better.</p><button type="button" onClick={()=>setOpen(false)}>Done</button><button type="button" onClick={()=>setSent(false)}>Send another</button></div>:
     <form className="feedback-form" onSubmit={submit}>
      <label>What kind of feedback?<select value={category} onChange={event=>setCategory(event.target.value as Category)}><option>General feedback</option><option>Bug report</option><option>Feature request</option></select></label>
-     <label>Your feedback<textarea rows={5} required minLength={10} maxLength={4000} value={message} onChange={event=>setMessage(event.target.value)} placeholder="Tell us what worked, what didn't, or what you'd like to see…"/></label>
-     <fieldset><legend>How would you rate your experience? <span>(optional)</span></legend><div className="feedback-stars">{[1,2,3,4,5].map(n=><button key={n} type="button" aria-label={n+' out of 5 stars'} aria-pressed={rating===n} onClick={()=>setRating(rating===n?null:n)}>{n<=(rating??0)?'★':'☆'}</button>)}</div></fieldset>
+     <label>Your feedback (optional)<textarea rows={5} maxLength={4000} value={message} onChange={event=>setMessage(event.target.value)} placeholder="Tell us what worked, what didn't, or what you'd like to see…"/></label>
+     <fieldset><legend>How would you rate your experience? <span>(required)</span></legend><div className="feedback-stars">{[1,2,3,4,5].map(n=><button key={n} type="button" aria-label={n+' out of 5 stars'} aria-pressed={rating===n} onClick={()=>setRating(n)}>{n<=(rating??0)?'★':'☆'}</button>)}</div></fieldset>
      <p className="feedback-privacy">Your feedback is linked to your account and is not visible to other users. Please avoid including passwords or sensitive personal information.</p>
      {error&&<p role="alert" className="feedback-error">{error}</p>}
-     <div className="feedback-actions"><button type="button" onClick={()=>setOpen(false)}>Cancel</button><button type="submit" disabled={busy||message.trim().length<10}>{busy?'Sending…':'Submit feedback'}</button></div>
+     <div className="feedback-actions"><button type="button" onClick={()=>setOpen(false)}>Cancel</button><button type="submit" disabled={busy||rating===null}>{busy?'Sending…':'Submit feedback'}</button></div>
     </form>}
    </div>
   </div>}
