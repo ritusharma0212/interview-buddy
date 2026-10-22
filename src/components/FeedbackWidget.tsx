@@ -30,7 +30,7 @@ export function FeedbackWidget(){
      <label><select aria-label="Feedback category" value={category} onChange={event=>setCategory(event.target.value as Category)}><option>General feedback</option><option>Bug report</option><option>Feature request</option></select></label>
      <label><textarea aria-label="Written feedback (optional)" rows={5} maxLength={4000} value={message} onChange={event=>setMessage(event.target.value)} placeholder="Tell us what worked, what didn't, or what you'd like to see…"/></label>
      <fieldset><legend>How would you rate your experience? <span>(required)</span></legend><div className="feedback-stars">{[1,2,3,4,5].map(n=><button key={n} type="button" aria-label={n+' out of 5 stars'} aria-pressed={rating===n} onClick={()=>setRating(n)}>{n<=(rating??0)?'★':'☆'}</button>)}</div></fieldset>
-     <p className="feedback-privacy">Your feedback is linked to your account and is not visible to other users. Please avoid including passwords or sensitive personal information.</p>
+     <p className="feedback-privacy">Your feedback is not visible to other users. Please avoid including passwords or sensitive personal information.</p>
      {error&&<p role="alert" className="feedback-error">{error}</p>}
      <div className="feedback-actions"><button type="button" onClick={()=>setOpen(false)}>Cancel</button><button type="submit" disabled={busy||rating===null}>{busy?'Sending…':'Submit feedback'}</button></div>
     </form>}
