@@ -23,6 +23,6 @@ export function ThemeToggle(){
   try{window.localStorage.setItem(KEY,next)}catch{/* Browser may block storage. */}
  }
  return <button className="theme-toggle" type="button" onClick={toggle} aria-label={theme==='light'?'Switch to dark mode':'Switch to light mode'} title={theme==='light'?'Switch to dark mode':'Switch to light mode'} aria-pressed={theme==='dark'}>
-  <span aria-hidden="true">{theme==='light'?'☾':'☀'}</span><span>{theme==='light'?'Dark mode':'Light mode'}</span>
+  <span aria-hidden="true">{theme==='light'?'☾':'☀'}</span>
  </button>;
 }
