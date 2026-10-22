@@ -5,6 +5,7 @@ import {MockInterview} from './MockInterview';
 import {EditInterview} from './EditInterview';
 import {CareerProfile} from './CareerProfile';
 import {ThemeToggle} from './ThemeToggle';
+import {FeedbackWidget} from './FeedbackWidget';
 import {GuidedTour} from './GuidedTour';
 import {seniorityLabel} from '@/lib/target-seniority';
 type Interview={id:string;company_name:string;role_title:string;interview_stage:string;target_seniority?:string;interview_at:string|null;job_description?:string|null;recruiter_instructions?:string|null};
@@ -34,7 +35,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
      <button data-tour="practice" type="button" aria-pressed={mode==='practice'} onClick={()=>{setMode('practice');setShowAddInterview(false)}}>Question Practice</button>
      <button data-tour="profile" type="button" aria-pressed={mode==='profile'} onClick={()=>{setMode('profile');setShowAddInterview(false)}}>My Profile</button>
     </nav>
-    <div className="app-header-actions"><ThemeToggle/><form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form></div>
+    <div className="app-header-actions"><FeedbackWidget/><ThemeToggle/><form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form></div>
    </div>
   </header>
   <div className="app-shell">
