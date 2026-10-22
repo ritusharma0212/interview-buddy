@@ -23,9 +23,9 @@ export function FeedbackWidget(){
  return <>
   <button type="button" className="feedback-trigger" onClick={()=>{setOpen(true);setSent(false);setError('')}}>💬 Send feedback</button>
   {open&&<div className="feedback-overlay" onMouseDown={event=>{if(event.target===event.currentTarget)setOpen(false)}}>
-   <div className="feedback-dialog" role="dialog" aria-modal="true" aria-labelledby="feedback-title">
-    <div className="feedback-heading"><h2 id="feedback-title">Help improve Interview Buddy</h2><button type="button" aria-label="Close feedback" onClick={()=>setOpen(false)}>✕</button></div>
-    {sent?<div className="feedback-success" role="status"><h3>Thank you for your feedback!</h3><p>Your feedback has been saved. We appreciate you helping make Interview Buddy better.</p><button type="button" onClick={()=>setOpen(false)}>Done</button><button type="button" onClick={()=>setSent(false)}>Send another</button></div>:
+   <div className="feedback-dialog" role="dialog" aria-modal="true" aria-label={sent?"Feedback submitted":"Help improve Interview Buddy"}>
+    <div className="feedback-heading">{!sent&&<h2 id="feedback-title">Help improve Interview Buddy</h2>}<button type="button" aria-label="Close feedback" onClick={()=>setOpen(false)}>✕</button></div>
+    {sent?<div className="feedback-success" role="status"><h3>Thank you for your feedback!</h3><button type="button" onClick={()=>setOpen(false)}>Done</button><button type="button" onClick={()=>setSent(false)}>Send another</button></div>:
     <form className="feedback-form" onSubmit={submit}>
      <label><select aria-label="Feedback category" value={category} onChange={event=>setCategory(event.target.value as Category)}><option>General feedback</option><option>Bug report</option><option>Feature request</option></select></label>
      <label><textarea aria-label="Written feedback (optional)" rows={5} maxLength={4000} value={message} onChange={event=>setMessage(event.target.value)} placeholder="Tell us what worked, what didn't, or what you'd like to see…"/></label>
