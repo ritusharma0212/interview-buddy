@@ -306,3 +306,14 @@ html[data-theme="dark"] .app-brand img.app-brand-mark{background:transparent}
 .post-create-icon{font-size:1.5rem}
 .post-create-link{color:var(--primary);font-size:.87rem;margin-top:4px}
 @media(max-width:640px){.post-create-choices{padding:18px}.post-create-options{grid-template-columns:1fr}.post-create-options button{padding:18px}}
+
+/* Optional LinkedIn job import above the existing interview form. */
+.job-import{padding:0 0 18px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+.job-import>label{display:block;margin-bottom:8px}
+.job-import-row{display:flex;gap:10px;align-items:stretch}
+.job-import-row input{flex:1;min-width:0}
+.job-import-row button{flex-shrink:0;background:var(--primary);color:#fff;border-color:var(--primary)}
+.job-import-row button:hover:not(:disabled){background:var(--primary-dark);color:#fff}
+.job-import p{font-size:.84rem;color:var(--muted);margin:8px 0 0}
+.job-import .job-import-message{color:var(--ink)}
+@media(max-width:640px){.job-import-row{flex-direction:column}.job-import-row button{width:100%}}
