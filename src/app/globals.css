@@ -265,3 +265,26 @@ html[data-theme="dark"] .edit-interview-actions button[type="submit"]{background
 .feedback-success button{margin-right:8px}
 html[data-theme="dark"] .feedback-dialog{background:#1d2c42}
 @media(max-width:600px){.feedback-dialog{padding:18px}.feedback-trigger{padding:8px 10px;font-size:.85rem}}
+
+/* Reference header: brand left, navigation centered, utilities right. */
+.app-brand img.app-brand-mark{display:inline-block;vertical-align:middle;object-fit:contain;background:transparent;border-radius:8px}
+html[data-theme="dark"] .app-brand img.app-brand-mark{background:transparent}
+.app-header-actions button{white-space:nowrap}
+@media(min-width:1101px){
+ .app-header-inner{max-width:1440px;display:grid;grid-template-columns:minmax(185px,1fr) auto minmax(320px,1fr);align-items:center;gap:12px;flex-wrap:nowrap}
+ .app-brand{justify-self:start}
+ .app-nav{justify-self:center;justify-content:center;flex-wrap:nowrap;gap:0}
+ .app-nav button{padding:9px clamp(7px,1vw,14px);white-space:nowrap}
+ .app-header-actions{justify-self:end;justify-content:flex-end;flex-wrap:nowrap;gap:8px}
+}
+@media(min-width:641px) and (max-width:1100px){
+ .app-header-inner{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px}
+ .app-brand{grid-column:1;grid-row:1}
+ .app-header-actions{grid-column:2;grid-row:1;justify-self:end;justify-content:flex-end;flex-wrap:nowrap}
+ .app-nav{grid-column:1/-1;grid-row:2;justify-content:center;width:100%}
+}
+@media(max-width:640px){
+ .app-header-inner{display:flex;flex-wrap:wrap}
+ .app-header-actions{margin-left:auto;justify-content:flex-end}
+ .app-nav{order:3;width:100%;justify-content:center}
+}
