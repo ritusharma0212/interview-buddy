@@ -265,3 +265,22 @@ html[data-theme="dark"] .edit-interview-actions button[type="submit"]{background
 .feedback-success button{margin-right:8px}
 html[data-theme="dark"] .feedback-dialog{background:#1d2c42}
 @media(max-width:600px){.feedback-dialog{padding:18px}.feedback-trigger{padding:8px 10px;font-size:.85rem}}
+
+
+/* Center primary navigation while keeping account actions at the far right. */
+@media (min-width: 1001px) {
+ .app-header-inner {max-width: 1250px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;flex-wrap:nowrap}
+ .app-brand {justify-self:start}
+ .app-nav {justify-self:center;justify-content:center;flex-wrap:nowrap}
+ .app-header-actions {justify-self:end;justify-content:flex-end;flex-wrap:nowrap;margin-left:0}
+}
+@media (min-width:641px) and (max-width:1000px) {
+ .app-header-inner {display:flex;flex-wrap:wrap}
+ .app-header-actions {margin-left:auto;justify-content:flex-end}
+ .app-nav {order:3;flex-basis:100%;justify-content:center}
+}
+@media (max-width:640px) {
+ .app-header-inner {display:flex;flex-wrap:wrap}
+ .app-header-actions {margin-left:auto;justify-content:flex-end}
+ .app-nav {order:3;width:100%;justify-content:center}
+}
