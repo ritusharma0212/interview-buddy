@@ -265,3 +265,6 @@ html[data-theme="dark"] .edit-interview-actions button[type="submit"]{background
 .feedback-success button{margin-right:8px}
 html[data-theme="dark"] .feedback-dialog{background:#1d2c42}
 @media(max-width:600px){.feedback-dialog{padding:18px}.feedback-trigger{padding:8px 10px;font-size:.85rem}}
+
+.app-brand img.app-brand-mark{display:inline-block;vertical-align:middle;object-fit:contain;background:transparent;border-radius:8px}
+html[data-theme="dark"] .app-brand img.app-brand-mark{background:transparent}
