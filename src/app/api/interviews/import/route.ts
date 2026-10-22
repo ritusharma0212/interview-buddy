@@ -11,14 +11,6 @@ function decode(value:string){
 function clean(value:string){
  return decode(value.replace(/<\s*br\s*\/?\s*>/gi,'\n').replace(/<\/(p|li|div|h[1-6])\s*>/gi,'\n').replace(/<[^>]*>/g,' ').replace(/\r/g,'').replace(/[ \t]+/g,' ').replace(/\n\s*\n\s*\n/g,'\n\n')).trim();
 }
-function meta(html:string,key:string){
- const tags=html.match(/<meta\b[^>]*>/gi)??[];
- for(const tag of tags){
-  const attributes=Object.fromEntries(Array.from(tag.matchAll(/([\w:-]+)\s*=\s*(["'])(.*?)\2/g)).map(m=>[m[1].toLowerCase(),m[3]]));
-  if(attributes.property===key||attributes.name===key)return decode(attributes.content??'');
- }
- return '';
-}
 function extract(html:string){
  const scripts=Array.from(html.matchAll(/<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi));
  const candidates:unknown[]=[];
@@ -53,14 +45,16 @@ export async function POST(request:Request){
  url.username='';url.password='';
  try{
   const response=await fetch(url.toString(),{redirect:'manual',signal:AbortSignal.timeout(10000),headers:{'User-Agent':'Mozilla/5.0 (compatible; InterviewBuddy/1.0)','Accept':'text/html'} ,cache:'no-store'});
-  if(!response.ok||response.status>=300)return NextResponse.json({error:'LinkedIn did not allow us to access this posting. Please paste the job details manually.'},{status:422});
+  if([401,403,429,999].includes(response.status)||[301,302,303,307,308].includes(response.status))
+   return NextResponse.json({error:'LinkedIn blocked the job link import or requires sign-in. Please copy the company name, job title, and job description from LinkedIn and paste them manually.'},{status:422});
+  if(!response.ok)return NextResponse.json({error:'Could not retrieve this LinkedIn posting. Please paste the company name, job title, and job description manually.'},{status:422});
   if(!(response.headers.get('content-type')??'').includes('text/html'))return NextResponse.json({error:'This link did not return a job posting. Please enter the details manually.'},{status:422});
   if(Number(response.headers.get('content-length')??0)>2_000_000)return NextResponse.json({error:'The posting is too large to import. Please enter it manually.'},{status:422});
   const html=await response.text();
   if(html.length>2_000_000)return NextResponse.json({error:'The posting is too large to import. Please enter it manually.'},{status:422});
   const extracted=extract(html);
   if(!extracted||!extracted.company_name||!extracted.role_title||extracted.job_description.length<20)
-   return NextResponse.json({error:'Could not reliably extract the full job details from LinkedIn. Please copy and paste them manually.'},{status:422});
+   return NextResponse.json({error:'LinkedIn did not provide readable job details. The link may be restricted or the posting format may be unsupported. Please copy and paste the company name, job title, and job description manually.'},{status:422});
   return NextResponse.json(extracted);
- }catch{return NextResponse.json({error:'Unable to access this LinkedIn posting. Please enter the details manually.'},{status:422})}
+ }catch{return NextResponse.json({error:'Could not connect to LinkedIn. Import may be blocked or temporarily unavailable. Please paste the company name, job title, and job description manually.'},{status:422})}
 }
