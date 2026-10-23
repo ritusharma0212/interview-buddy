@@ -75,8 +75,6 @@ export async function POST(request:Request){
   if(Number(response.headers.get('content-length')??0)>2_000_000)return NextResponse.json({error:'The posting is too large to import. Please enter it manually.'},{status:422});
   const html=await response.text();
   if(html.length>2_000_000)return NextResponse.json({error:'The posting is too large to import. Please enter it manually.'},{status:422});
-  if(/the job you are trying to apply for has been filled|this job is no longer available|job posting has expired/i.test(html))
-   return NextResponse.json({error:'This job posting appears to be closed or filled. Please paste a saved copy of the job description manually.'},{status:422});
   const extracted=extract(html);
   if(!extracted||!extracted.company_name||!extracted.role_title||extracted.job_description.length<20)
    return NextResponse.json({error:'This job page did not provide readable job details. It may be restricted, expired, or use an unsupported format. Please copy and paste the company name, job title, and job description manually.'},{status:422});
