@@ -44,7 +44,12 @@ async function isPublicHost(host:string){
     const a=address.split('.').map(Number);
     return !(a[0]===0||a[0]===10||a[0]===127||a[0]>=224||(a[0]===169&&a[1]===254)||(a[0]===172&&a[1]>=16&&a[1]<=31)||(a[0]===192&&a[1]===168)||(a[0]===100&&a[1]>=64&&a[1]<=127)||(a[0]===192&&a[1]===0)||(a[0]===198&&a[1]>=18&&a[1]<=19)||(a[0]===192&&a[1]===0&&a[2]===0));
    }
-   // Deny IPv6 addresses rather than risk local or mapped IPv4 ranges.
+   // Globally routable IPv6 addresses generally use 2000::/3.
+   // Other ranges (loopback, link-local, ULA, mapped IPv4) are rejected.
+   if(family===6){
+    const first=parseInt(address.split(':')[0],16);
+    return Number.isFinite(first)&&first>=0x2000&&first<=0x3fff;
+   }
    return false;
   });
  }catch{return false}
