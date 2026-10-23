@@ -1,7 +1,7 @@
 'use client';
 import {useState} from 'react';
 
-type Feedback={score:number;strengths:string[];improvements:string[];improved_answer:string};
+type Feedback={score:number;strengths:string[];improvements:string[];improved_answer:string;why_better?:string[];reusable_method?:string};
 export type PracticeAttempt={id:string;question_index:number;answer_text:string;feedback:Feedback;created_at:string};
 
 function FeedbackDetails({attempt}:{attempt:PracticeAttempt}){
@@ -9,7 +9,15 @@ function FeedbackDetails({attempt}:{attempt:PracticeAttempt}){
   <details><summary>View your submitted answer</summary><p style={{whiteSpace:'pre-wrap'}}>{attempt.answer_text}</p></details>
   <p><b>Strengths</b></p><ul>{attempt.feedback.strengths.map((s,j)=><li key={j}>{s}</li>)}</ul>
   <p><b>How to improve</b></p><ul>{attempt.feedback.improvements.map((s,j)=><li key={j}>{s}</li>)}</ul>
-  <details><summary>Improved example answer</summary><p style={{whiteSpace:'pre-wrap'}}>{attempt.feedback.improved_answer}</p></details>
+  <details open><summary>Improved example answer</summary>
+   <p style={{whiteSpace:'pre-wrap'}}>{attempt.feedback.improved_answer}</p>
+   {Array.isArray(attempt.feedback.why_better)&&attempt.feedback.why_better.length>0&&
+    <div><p><b>Why this answer is stronger</b></p>
+     <ul>{attempt.feedback.why_better.map((reason,j)=><li key={j}>{reason}</li>)}</ul>
+    </div>}
+   {attempt.feedback.reusable_method&&
+    <p><b>Try this next time:</b> {attempt.feedback.reusable_method}</p>}
+  </details>
  </>;
 }
 
