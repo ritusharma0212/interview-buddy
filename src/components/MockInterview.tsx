@@ -51,7 +51,7 @@ export function MockInterview({interviewId}:{interviewId:string}){
      <button type="button" aria-pressed={mode==='speak'} onClick={()=>setMode('speak')}>Speak</button>
     </div>
     {mode==='type'?<textarea aria-label="Your interview answer" rows={5} maxLength={12000} value={answer} onChange={e=>setAnswer(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>:
-     <VoicePractice value={answer} onChange={setAnswer}/>}
+     <VoicePractice value={answer} onChange={setAnswer} onSubmit={text=>{if(!busy&&current?.status==='active'&&remaining>0)void act(`${url}/${current.id}`,{answer:text})}}/>}
     <button type="button" disabled={busy||answer.trim().length<20} onClick={()=>act(`${url}/${current.id}`,{answer})}>{busy?'Thinking…':'Submit answer'}</button>
    </>}
    <button type="button" style={{marginLeft:8}} disabled={busy} onClick={()=>act(`${url}/${current.id}/finish`)}>Finish interview & get assessment</button>
