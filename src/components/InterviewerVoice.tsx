@@ -38,8 +38,7 @@ export function InterviewerVoice({question,enabled}:{question:string;enabled:boo
  if(!supported)return <p style={{fontSize:12,color:'#475569'}}>Spoken questions are not supported in this browser. You can still read the questions.</p>;
  return <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap',margin:'10px 0'}}>
   <button type="button" onClick={toggleAuto} disabled={!enabled}>{autoSpeak?'Turn off auto-read':'Enable spoken questions'}</button>
-  <button type="button" onClick={()=>speak(question)} disabled={!enabled||!question}>Replay question</button>
-  <button type="button" onClick={()=>{window.speechSynthesis.cancel();setSpeaking(false)}} disabled={!speaking}>Stop audio</button>
+  <button type="button" onClick={()=>{if(speaking){window.speechSynthesis.cancel();setSpeaking(false)}else{speak(question)}}} disabled={!enabled||!question}>{speaking?'Stop replay':'Replay question'}</button>
   <span style={{fontSize:12,color:'#475569'}}>{speaking?'Interviewer speaking…':autoSpeak?'New questions will be read aloud':'Audio is off'}</span>
  </div>;
 }
