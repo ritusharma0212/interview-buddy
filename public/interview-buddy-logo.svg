@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title"><title id="title">Interview Buddy</title><defs><linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4267e3"/><stop offset="1" stop-color="#2846b1"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#blue)"/><circle cx="209" cy="232" r="52" fill="#fff"/><path d="M109 365v-40c0-62 44-102 100-102s100 40 100 102v40z" fill="#fff"/><circle cx="337" cy="252" r="40" fill="#a8bbff"/><path d="M312 314c10-19 25-27 48-27 41 0 66 30 66 73v5H315v-40c0-4-1-8-3-11z" fill="#a8bbff"/><path d="M314 107h90c15 0 27 12 27 27v23c0 15-12 27-27 27h-47l-21 21v-21h-22c-15 0-27-12-27-27v-23c0-15 12-27 27-27z" fill="#fff"/><g fill="#3556c1"><circle cx="331" cy="146" r="7"/><circle cx="358" cy="146" r="7"/><circle cx="385" cy="146" r="7"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+<title id="title">Interview Breakthrough</title>
+<defs><linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4267e3"/><stop offset="1" stop-color="#2846b1"/></linearGradient></defs>
+<rect x="2" y="2" width="508" height="508" rx="110" fill="url(#blue)"/>
+<rect x="5" y="5" width="502" height="502" rx="107" fill="none" stroke="#a8bbff" stroke-opacity=".42" stroke-width="4"/>
+<path d="M149 135H310C331 135 347 152 347 173V276C347 298 331 314 310 314H208L150 373V314H149C128 314 112 298 112 276V173C112 152 128 135 149 135Z" fill="#fff"/>
+<path d="M251 354L357 248H316C301 248 290 237 290 222S301 196 316 196H420C435 196 446 207 446 222V326C446 341 435 352 420 352S394 341 394 326V285L288 391C278 401 261 401 251 391S241 364 251 354Z" fill="#a8bbff" stroke="#2846b1" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>
