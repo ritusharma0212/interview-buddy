@@ -4,7 +4,7 @@ import {VoicePractice} from './VoicePractice';
 import {PracticeFeedbackHistory} from './PracticeFeedbackHistory';
 type Question={question:string;competency:string;why_this_matters:string;answer_guidance:string};
 type QuestionSet={id:string;questions:Question[];created_at:string};
-type Feedback={score:number;strengths:string[];improvements:string[];improved_answer:string};
+type Feedback={score:number;strengths:string[];improvements:string[];improved_answer:string;why_better?:string[];reusable_method?:string};
 type Attempt={id:string;question_index:number;answer_text:string;feedback:Feedback;created_at:string};
 export function InterviewQuestions({interviewId}:{interviewId:string}){
  const [set,setSet]=useState<QuestionSet|null>(null);
