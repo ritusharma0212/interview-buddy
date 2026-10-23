@@ -33,9 +33,9 @@ export function NewInterview(){
   }catch(e){setError(e instanceof Error?e.message:'Could not save interview');setBusy(false)}
  }
  return <div className="new-interview">
-  <div className="job-import"><label htmlFor="job-posting-url">LinkedIn job posting URL (optional)</label>
-   <div className="job-import-row"><input id="job-posting-url" type="url" value={jobUrl} onChange={e=>setJobUrl(e.target.value)} placeholder="https://www.linkedin.com/jobs/view/..." aria-describedby="job-import-note"/><button type="button" disabled={importing||!jobUrl.trim()} onClick={()=>void importJob()}>{importing?'Importing…':'Import job details'}</button></div>
-   <p id="job-import-note">We’ll fill in the company, job title, and description when the posting is publicly accessible. You can also enter everything manually.</p>
+  <div className="job-import"><label htmlFor="job-posting-url">Job posting URL (LinkedIn or Circle careers)</label>
+   <div className="job-import-row"><input id="job-posting-url" type="url" value={jobUrl} onChange={e=>setJobUrl(e.target.value)} placeholder="Paste a LinkedIn or Circle careers URL" aria-describedby="job-import-note"/><button type="button" disabled={importing||!jobUrl.trim()} onClick={()=>void importJob()}>{importing?'Importing…':'Import job details'}</button></div>
+   <p id="job-import-note">We’ll try to fill in the company, job title, and description from a public LinkedIn or Circle careers posting. You can also enter everything manually.</p>
    {importMessage&&<p role="status" className="job-import-message">{importMessage}</p>}
   </div>
   <form onSubmit={submit} style={{display:'grid',gap:10,maxWidth:650}}>
