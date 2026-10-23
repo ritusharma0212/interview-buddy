@@ -36,6 +36,8 @@ export function MockInterview({interviewId}:{interviewId:string}){
   finally{setBusy(false)}
  }
  const active=current?.status==='active';
+ const expired=Boolean(active&&remaining===0);
+ const answered=Boolean(current?.turns.some(t=>t.role==='candidate'));
  const lastQuestion=active?[...current.turns].reverse().find(t=>t.role==='interviewer')?.text:null;
  return <section style={{padding:14,border:'1px solid #cbd5e1',borderRadius:8,marginTop:12}}>
   <p><b>Mock Interview</b> · 30 minutes · AI interviewer</p>
@@ -43,6 +45,9 @@ export function MockInterview({interviewId}:{interviewId:string}){
   {!active&&<button type="button" disabled={busy} onClick={()=>act(url)}>{busy?'Starting…':'Start 30-minute mock interview'}</button>}
   {active&&<>
    <p role="timer" style={{fontSize:22,fontWeight:700,fontVariantNumeric:'tabular-nums'}}>Time remaining: {time}</p>
+   {expired&&<div role="status" style={{marginBottom:12}}><p>This mock interview session has expired.</p>
+    {!answered?<button type="button" disabled={busy} onClick={()=>act(url)}>{busy?'Starting…':'Start new mock interview'}</button>:<p>Finish this session to receive your assessment before starting another.</p>}
+   </div>}
    <p><b>Interviewer:</b> {lastQuestion}</p>
    <InterviewerVoice question={lastQuestion??''} enabled={remaining>0}/>
    {remaining>0&&<>
@@ -51,10 +56,10 @@ export function MockInterview({interviewId}:{interviewId:string}){
      <button type="button" aria-pressed={mode==='speak'} onClick={()=>setMode('speak')}>Speak</button>
     </div>
     {mode==='type'?<textarea aria-label="Your interview answer" rows={5} maxLength={12000} value={answer} onChange={e=>setAnswer(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>:
-     <VoicePractice value={answer} onChange={setAnswer}/>}
+     <VoicePractice value={answer} onChange={setAnswer} onSubmit={text=>{if(!busy&&current?.status==='active'&&remaining>0)void act(`${url}/${current.id}`,{answer:text})}}/>}
     <button type="button" disabled={busy||answer.trim().length<20} onClick={()=>act(`${url}/${current.id}`,{answer})}>{busy?'Thinking…':'Submit answer'}</button>
    </>}
-   <button type="button" style={{marginLeft:8}} disabled={busy} onClick={()=>act(`${url}/${current.id}/finish`)}>Finish interview & get assessment</button>
+   {(!expired||answered)&&<button type="button" style={{marginLeft:8}} disabled={busy} onClick={()=>act(`${url}/${current.id}/finish`)}>Finish interview & get assessment</button>}
    <details style={{marginTop:12}}><summary>Interview transcript ({current.turns.length} messages)</summary>
     {current.turns.map((t,i)=><p key={i}><b>{t.role==='interviewer'?'Interviewer':'You'}:</b> {t.text}</p>)}
    </details>

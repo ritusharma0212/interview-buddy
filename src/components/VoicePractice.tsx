@@ -15,7 +15,7 @@ type SpeechWindow=Window&{
  webkitSpeechRecognition?:new()=>SpeechRecognitionLike;
 };
 
-export function VoicePractice({value,onChange}:{value:string;onChange:(text:string)=>void}){
+export function VoicePractice({value,onChange,onSubmit}:{value:string;onChange:(text:string)=>void;onSubmit?:(text:string)=>void}){
  const recognition=useRef<SpeechRecognitionLike|null>(null);
  const [supported,setSupported]=useState<boolean|null>(null);
  const [listening,setListening]=useState(false);
@@ -23,6 +23,10 @@ export function VoicePractice({value,onChange}:{value:string;onChange:(text:stri
  const [seconds,setSeconds]=useState(0);
  const [error,setError]=useState('');
  const finalText=useRef('');
+ const submitOnEnd=useRef(false);
+ const submitCallback=useRef(onSubmit);
+ submitCallback.current=onSubmit;
+ const [stopping,setStopping]=useState(false);
  const latestValue=useRef(value);
  latestValue.current=value;
  useEffect(()=>{
@@ -39,7 +43,7 @@ export function VoicePractice({value,onChange}:{value:string;onChange:(text:stri
   const browser=window as SpeechWindow;
   const SpeechRecognition=browser.SpeechRecognition||browser.webkitSpeechRecognition;
   if(!SpeechRecognition){setError('Speech recognition is unavailable in this browser. Try Chrome on a desktop computer.');return}
-  setError('');setInterim('');finalText.current=latestValue.current.trim();
+  setError('');setInterim('');setStopping(false);submitOnEnd.current=false;finalText.current=latestValue.current.trim();
   const session=new SpeechRecognition();
   session.lang='en-US';session.continuous=true;session.interimResults=true;
   session.onresult=(event)=>{
@@ -60,21 +64,35 @@ export function VoicePractice({value,onChange}:{value:string;onChange:(text:stri
     'network':'Speech recognition could not connect. Check your internet connection.',
     'no-speech':'No speech detected. Try speaking closer to the microphone.'
    };
+   submitOnEnd.current=false;
    setError(messages[event.error]||'Speech recognition stopped: '+event.error);
   };
-  session.onend=()=>{setListening(false);setInterim('');recognition.current=null};
+  session.onend=()=>{
+   const shouldSubmit=submitOnEnd.current;
+   submitOnEnd.current=false;
+   setListening(false);setStopping(false);setInterim('');recognition.current=null;
+   if(shouldSubmit&&submitCallback.current){
+    const text=finalText.current.trim();
+    if(text.length>=20)submitCallback.current(text);
+    else setError('Please speak at least 20 characters before submitting your response.');
+   }
+  };
   try{session.start();recognition.current=session;setListening(true)}
   catch{setError('Could not start the microphone. Check browser permissions.')}
  }
- function stop(){recognition.current?.stop();setListening(false)}
- function clear(){recognition.current?.abort();recognition.current=null;setListening(false);onChange('');setInterim('');finalText.current='';setSeconds(0);setError('')}
+ function stop(){
+  if(!recognition.current||stopping)return;
+  submitOnEnd.current=Boolean(onSubmit);
+  setStopping(true);
+  recognition.current.stop();
+ }
+ function clear(){submitOnEnd.current=false;setStopping(false);recognition.current?.abort();recognition.current=null;setListening(false);onChange('');setInterim('');finalText.current='';setSeconds(0);setError('')}
  const time=`${Math.floor(seconds/60).toString().padStart(2,'0')}:${(seconds%60).toString().padStart(2,'0')}`;
  return <div style={{margin:'12px 0',padding:12,border:'1px solid #ccd6e0',borderRadius:8,background:'#f3f7fb'}}>
   {supported===false?<p>Voice transcription is not supported in this browser. Use Chrome on desktop, or switch to Type.</p>:<>
    <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
-    <button type="button" onClick={start} disabled={listening||supported===null}>Start speaking</button>
+    <button type="button" onClick={listening?stop:start} disabled={supported===null||stopping}>{stopping?'Finishing transcription…':listening?(onSubmit?'Stop and submit response':'Stop speaking'):'Start speaking'}</button>
     <span role="timer" aria-label="Speaking timer" style={{fontVariantNumeric:'tabular-nums',fontWeight:600,minWidth:46}}>{time}</span>
-    <button type="button" onClick={stop} disabled={!listening}>Stop</button>
     <button type="button" onClick={clear} disabled={!value&&!interim&&!listening}>Clear</button>
    </div>
    {interim&&<p aria-live="polite" style={{color:'#667085'}}>Recognizing: {interim}</p>}
@@ -83,7 +101,7 @@ export function VoicePractice({value,onChange}:{value:string;onChange:(text:stri
     <textarea id="voice-answer-transcript" rows={5} maxLength={12000}
      value={value} onChange={e=>onChange(e.target.value)}
      style={{display:'block',width:'100%',boxSizing:'border-box',marginTop:8}}/>
-    <p style={{fontSize:12}}>Correct any transcription mistakes, then click Get AI feedback.</p>
+    <p style={{fontSize:12}}>Correct any transcription mistakes, then submit your answer.</p>
    </>}
    {listening&&<p style={{fontSize:12}}>Speak naturally. Your transcript will be available to review after you stop.</p>}
   </>}
