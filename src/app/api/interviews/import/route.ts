@@ -68,6 +68,7 @@ export async function POST(request:Request){
   const response=await fetch(url.toString(),{redirect:'manual',signal:AbortSignal.timeout(10000),headers:{'User-Agent':'Mozilla/5.0 (compatible; InterviewBuddy/1.0)','Accept':'text/html'} ,cache:'no-store'});
   if([301,302,303,307,308].includes(response.status))
    return NextResponse.json({error:'This job site redirects to another page, which could not be imported automatically. Please paste the job details manually.'},{status:422});
+  console.info('[job-import] upstream status',{host:url.hostname,status:response.status});
   if([401,403,429,999].includes(response.status))
    return NextResponse.json({error:'The job site blocked automated access or requires sign-in. Please copy the company name, job title, and job description and paste them manually.'},{status:422});
   if(!response.ok)return NextResponse.json({error:'Could not retrieve this job posting. Please paste the company name, job title, and job description manually.'},{status:422});
@@ -79,5 +80,5 @@ export async function POST(request:Request){
   if(!extracted||!extracted.company_name||!extracted.role_title||extracted.job_description.length<20)
    return NextResponse.json({error:'This job page did not provide readable job details. It may be restricted, expired, or use an unsupported format. Please copy and paste the company name, job title, and job description manually.'},{status:422});
   return NextResponse.json(extracted);
- }catch{return NextResponse.json({error:'Could not connect to the job site. Import may be blocked or temporarily unavailable. Please paste the company name, job title, and job description manually.'},{status:422})}
+ }catch(error){console.warn('[job-import] fetch failure',{host:url.hostname,type:error instanceof Error?error.name:'unknown'});return NextResponse.json({error:'Could not connect to the job site. Import may be blocked or temporarily unavailable. Please paste the company name, job title, and job description manually.'},{status:422})}
 }
