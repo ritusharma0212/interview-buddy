@@ -59,6 +59,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
  },[]);
 
  const [newInterviewId,setNewInterviewId]=useState<string|null>(null);
+ const [returnToChoicesId,setReturnToChoicesId]=useState<string|null>(null);
  const choicesRef=useRef<HTMLElement|null>(null);
  const [focusInterviewId,setFocusInterviewId]=useState<string|null>(null);
  useEffect(()=>{
@@ -107,6 +108,11 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
    {newInterviewId&&<section ref={choicesRef} tabIndex={-1} className="post-create-choices" aria-labelledby="post-create-title">
     <div className="post-create-eyebrow">Interview created successfully</div>
     <h2 id="post-create-title">How would you like to prepare?</h2>
+    <div className="post-create-profile-reminder">
+     <strong>Get a more personalized interview experience</strong>
+     <p>Add your career profile to help tailor suggested answers and feedback to your experience. You can also start practicing now.</p>
+     <button type="button" onClick={()=>{setReturnToChoicesId(newInterviewId);setNewInterviewId(null);setMode('profile');setShowAddInterview(false)}}>Set up My Profile →</button>
+    </div>
     <div className="post-create-options">
      <button type="button" onClick={()=>choosePreparation('mock')}><span className="post-create-icon" aria-hidden="true">🎙️</span><strong>Mock Interview</strong><span>Simulate a real interview with AI questions, follow-ups, and performance feedback.</span><span className="post-create-link">Start mock interview →</span></button>
      <button type="button" onClick={()=>choosePreparation('practice')}><span className="post-create-icon" aria-hidden="true">📖</span><strong>Question Practice</strong><span>Practice one question at a time, at your own pace, with targeted feedback.</span><span className="post-create-link">Practice questions →</span></button>
@@ -116,7 +122,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
    <div hidden={Boolean(newInterviewId)||mode!=='practice'} className="mode-panel">
     {practice}
    </div>
-   {!newInterviewId&&mode==='profile'&&<CareerProfile/>}
+   {!newInterviewId&&mode==='profile'&&<CareerProfile onSaved={returnToChoicesId?()=>{setNewInterviewId(returnToChoicesId);setReturnToChoicesId(null);setMode('dashboard')}:undefined}/>}
    {!newInterviewId&&mode==='mock'&&<section className="mode-panel mock-panel">
     <h2>Mock Interview</h2>
     {interviews.length===0?<p>Create an interview workspace under Question Practice first.</p>:
