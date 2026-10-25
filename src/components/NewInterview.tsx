@@ -84,7 +84,7 @@ export function NewInterview(){
     <p>Works with any job. Copy the job description and paste it here.</p>
     
     <textarea id="pasted-job-description" rows={8} maxLength={60000} value={description} onChange={e=>setDescription(e.target.value)} placeholder="Paste the job description here…"/>
-    <button type="button" disabled={extracting||description.trim().length<20} onClick={()=>void extractPasted()}>{extracting?'Extracting…':'Extract company & role'}</button>
+    <button type="button" className="extract-company-role-button" disabled={extracting||description.trim().length<20} onClick={()=>void extractPasted()}>{extracting?'Extracting…':'Extract company & role'}</button>
     {extractMessage&&<p role="status">{extractMessage}</p>}
    </div>}
    {importMethod==='extension'&&<div role="tabpanel" id="job-panel-extension" aria-labelledby="job-tab-extension">
