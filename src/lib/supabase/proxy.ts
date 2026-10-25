@@ -21,6 +21,15 @@ export async function updateSession(request: NextRequest) {
       },
     },
   );
-  await db.auth.getUser();
+  const { data: { user } } = await db.auth.getUser();
+  const path = request.nextUrl.pathname;
+  // Create a guest only on app entry; never during login or API calls.
+  if (!user && (path === '/' || path === '/dashboard')) {
+    const { error } = await db.auth.signInAnonymously();
+    if (error) {
+      console.error('[guest-auth] Anonymous sign-in failed:', error.message);
+      return NextResponse.redirect(new URL('/login?error=guest', request.url));
+    }
+  }
   return response;
 }
