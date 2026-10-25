@@ -61,7 +61,7 @@ export function CareerProfile(){
    </div>
   </div>
   <label htmlFor="profile-editor">Your career profile — review and edit before saving</label>
-  <textarea id="profile-editor" rows={18} maxLength={30000} value={text} onChange={e=>{setText(e.target.value);setSaved(false)}} placeholder="Summary\n\nExperience\n\nProjects and achievements\n\nSkills"/>
+  <textarea id="profile-editor" rows={18} maxLength={30000} value={text} onChange={e=>{setText(e.target.value);setSaved(false)}} placeholder={['Summary', '', 'Experience', '', 'Projects and achievements', '', 'Skills'].join(String.fromCharCode(10))}/>
   <div className="career-profile-actions"><button type="button" onClick={save} disabled={working||loading}>{working?'Working…':'Save profile'}</button><span>{saved?'Saved profile':'Unsaved changes'}</span></div>
   {loading&&<p>Loading profile…</p>}
   {message&&<p role="status">{message}</p>}
