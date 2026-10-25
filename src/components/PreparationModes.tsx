@@ -107,6 +107,11 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
    {newInterviewId&&<section ref={choicesRef} tabIndex={-1} className="post-create-choices" aria-labelledby="post-create-title">
     <div className="post-create-eyebrow">Interview created successfully</div>
     <h2 id="post-create-title">How would you like to prepare?</h2>
+    <div className="post-create-profile-reminder">
+     <strong>Get a more personalized interview experience</strong>
+     <p>Add your career profile to help tailor suggested answers and feedback to your experience. You can also start practicing now.</p>
+     <button type="button" onClick={()=>{setNewInterviewId(null);setMode('profile');setShowAddInterview(false)}}>Set up My Profile →</button>
+    </div>
     <div className="post-create-options">
      <button type="button" onClick={()=>choosePreparation('mock')}><span className="post-create-icon" aria-hidden="true">🎙️</span><strong>Mock Interview</strong><span>Simulate a real interview with AI questions, follow-ups, and performance feedback.</span><span className="post-create-link">Start mock interview →</span></button>
      <button type="button" onClick={()=>choosePreparation('practice')}><span className="post-create-icon" aria-hidden="true">📖</span><strong>Question Practice</strong><span>Practice one question at a time, at your own pace, with targeted feedback.</span><span className="post-create-link">Practice questions →</span></button>
