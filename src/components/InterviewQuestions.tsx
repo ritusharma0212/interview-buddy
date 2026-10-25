@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useState} from 'react';
+import {useRouter} from 'next/navigation';
 import {VoicePractice} from './VoicePractice';
 import {PracticeFeedbackHistory} from './PracticeFeedbackHistory';
 type Question={question:string;competency:string;why_this_matters:string;answer_guidance:string};
@@ -7,6 +8,7 @@ type QuestionSet={id:string;questions:Question[];created_at:string};
 type Feedback={score:number;strengths:string[];improvements:string[];improved_answer:string;why_better?:string[];reusable_method?:string};
 type Attempt={id:string;question_index:number;answer_text:string;feedback:Feedback;created_at:string};
 export function InterviewQuestions({interviewId}:{interviewId:string}){
+ const router=useRouter();
  const [set,setSet]=useState<QuestionSet|null>(null);
  const [loading,setLoading]=useState(true);
  const [generating,setGenerating]=useState(false);
@@ -54,6 +56,8 @@ export function InterviewQuestions({interviewId}:{interviewId:string}){
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Feedback failed');
     setAttempts(prev=>[data.attempt,...prev]);
+    // Refresh server-derived interview status after saving the attempt.
+    router.refresh();
    }catch(e){setPracticeError(p=>({...p,[index]:e instanceof Error?e.message:'Feedback failed'}))}
    finally{setEvaluating(null)}
  }
