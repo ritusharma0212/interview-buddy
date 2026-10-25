@@ -53,7 +53,7 @@ export function NewInterview(){
    if(!response.ok)throw new Error(data.error||'Could not import the posting.');
    setCompany(data.company_name);setTitle(data.role_title);setDescription(data.job_description);setImportMethod('link');
    setImportMessage('Job details imported. Review and edit them before saving.');
-  }catch(e){setShowPaste(true);setImportMessage(e instanceof Error?e.message:'Could not import the posting. Paste the job description below.')}
+  }catch(e){setImportMethod('paste');setImportMessage(e instanceof Error?e.message:'Could not import the posting. Paste the job description below.')}
   finally{setImporting(false)}
  }
  async function submit(e:React.FormEvent<HTMLFormElement>){
