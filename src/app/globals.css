@@ -327,6 +327,6 @@ html[data-theme="dark"] .app-brand img.app-brand-mark{background:transparent}
 @media(max-width:480px){.job-import-tabs button{font-size:.78rem;padding:9px 4px}}
 
 /* Match the Save interview button for company/role extraction, including disabled state. */
-.job-import-panel button.primary{background:var(--primary);border-color:var(--primary);color:#fff}
-.job-import-panel button.primary:hover:not(:disabled){background:var(--primary-dark);border-color:var(--primary-dark);color:#fff}
-.job-import-panel button.primary:disabled{background:var(--primary);border-color:var(--primary);color:#fff;opacity:.55;cursor:not-allowed}
+button.extract-company-role-button{background:var(--primary);border-color:var(--primary);color:#fff}
+button.extract-company-role-button:hover:not(:disabled){background:var(--primary-dark);border-color:var(--primary-dark);color:#fff}
+button.extract-company-role-button:disabled{background:var(--primary);border-color:var(--primary);color:#fff;opacity:.55;cursor:not-allowed}
