@@ -1,5 +1,5 @@
 'use client';
-import {useState} from 'react';
+import {useEffect,useState} from 'react';
 import {TARGET_SENIORITIES} from '@/lib/target-seniority';
 export function NewInterview(){
  const [error,setError]=useState('');
@@ -13,6 +13,31 @@ export function NewInterview(){
  const [showPaste,setShowPaste]=useState(false);
  const [extracting,setExtracting]=useState(false);
  const [extractMessage,setExtractMessage]=useState('');
+ const [bookmarkletMessage,setBookmarkletMessage]=useState('');
+ useEffect(()=>{
+  function hydrate(){
+   const raw=sessionStorage.getItem('interview-breakthrough-job-import');
+   if(!raw)return;
+   sessionStorage.removeItem('interview-breakthrough-job-import');
+   try{
+    const item=JSON.parse(raw);
+    if(typeof item.description!=='string'||item.description.length<20)return;
+    setDescription(item.description.slice(0,60000));
+    setShowPaste(true);
+    if(typeof item.url==='string')setJobUrl(item.url);
+    setImportMessage('Job text received. Extract company and role, then review before saving.');
+   }catch{}
+  }
+  hydrate();
+  window.addEventListener('interview-breakthrough-import',hydrate);
+  return ()=>window.removeEventListener('interview-breakthrough-import',hydrate);
+ },[]);
+ async function copyBookmarklet(){
+  const origin=window.location.origin;
+  const script=`javascript:(function(){var origin=${JSON.stringify(origin)};var url=location.href;var text=String(window.getSelection()||'').trim();var selectors=['.jobs-description__content','.jobs-box__html-content','.jobs-description-content__text','.show-more-less-html__markup','[data-testid="job-description"]','[class*="job-description"]'];for(var i=0;!text&&i<selectors.length;i++){var el=document.querySelector(selectors[i]);if(el&&el.innerText&&el.innerText.trim().length>=20)text=el.innerText.trim()}if(!text){alert('Select the job description on this page and try again.');return}text=text.slice(0,60000);if(!confirm('Share '+text.length+' characters of job text with Interview Breakthrough?'))return;var popup=window.open(origin+'/dashboard?import=bookmarklet','_blank');if(!popup){alert('Allow pop-ups for this site and try again.');return}function receive(e){if(e.source!==popup||e.origin!==origin||!e.data||e.data.type!=='INTERVIEW_BREAKTHROUGH_READY')return;window.removeEventListener('message',receive);popup.postMessage({type:'INTERVIEW_BREAKTHROUGH_JOB',description:text,url:url},origin)}window.addEventListener('message',receive);setTimeout(function(){window.removeEventListener('message',receive)},60000)})();`;
+  try{await navigator.clipboard.writeText(script);setBookmarkletMessage('Copied! Create a bookmark and paste the code into its URL field. Then click it while viewing a job posting.');}
+  catch{setBookmarkletMessage('Could not copy. Allow clipboard access and try again.')}
+ }
  async function extractPasted(){
   setExtracting(true);setExtractMessage('');
   try{
@@ -48,7 +73,12 @@ export function NewInterview(){
   }catch(e){setError(e instanceof Error?e.message:'Could not save interview');setBusy(false)}
  }
  return <div className="new-interview">
-  <div className="job-import"><label htmlFor="job-posting-url">Job posting URL (any public careers site)</label>
+  <div className="job-import">
+   <p><strong>Import from LinkedIn or HiringCafe</strong></p>
+   <button type="button" onClick={()=>void copyBookmarklet()}>Copy job import bookmarklet</button>
+   <p>Create a browser bookmark named “Send to Interview Breakthrough” and paste the copied code into its URL field. On a job posting, select its description if needed and click the bookmark. You will approve what is shared.</p>
+   {bookmarkletMessage&&<p role="status">{bookmarkletMessage}</p>}
+   <label htmlFor="job-posting-url">Job posting URL (any public careers site)</label>
    <div className="job-import-row"><input id="job-posting-url" type="url" value={jobUrl} onChange={e=>setJobUrl(e.target.value)} placeholder="https://company.com/careers/job/..." aria-describedby="job-import-note"/><button type="button" disabled={importing||!jobUrl.trim()} onClick={()=>void importJob()}>{importing?'Importing…':'Import job details'}</button></div>
    <p id="job-import-note">We’ll try to fill in the company, job title, and description from a public job posting. You can also enter everything manually.</p>
    {importMessage&&<p role="status" className="job-import-message">{importMessage}</p>}
