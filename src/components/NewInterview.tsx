@@ -1,5 +1,5 @@
 'use client';
-import {useState} from 'react';
+import {useEffect,useState} from 'react';
 import {TARGET_SENIORITIES} from '@/lib/target-seniority';
 export function NewInterview(){
  const [error,setError]=useState('');
@@ -13,6 +13,26 @@ export function NewInterview(){
  const [showPaste,setShowPaste]=useState(false);
  const [extracting,setExtracting]=useState(false);
  const [extractMessage,setExtractMessage]=useState('');
+ useEffect(()=>{
+  function receive(){
+   const raw=sessionStorage.getItem('interview-breakthrough-extension-import');
+   if(!raw)return;
+   sessionStorage.removeItem('interview-breakthrough-extension-import');
+   try{
+    const data=JSON.parse(raw);
+    if(typeof data.description!=='string'||data.description.trim().length<20||data.description.length>60000)return;
+    if(typeof data.url!=='string'||!data.url.startsWith('https://'))return;
+    setDescription(data.description);
+    setJobUrl(data.url.slice(0,2048));
+    setShowPaste(true);
+    setImportMessage('Job description received from extension. Extract company and role, then review before saving.');
+   }catch{}
+  }
+  receive();
+  window.addEventListener('interview-breakthrough-extension-import',receive);
+  return ()=>window.removeEventListener('interview-breakthrough-extension-import',receive);
+ },[]);
+
  async function extractPasted(){
   setExtracting(true);setExtractMessage('');
   try{
