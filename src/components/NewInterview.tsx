@@ -10,7 +10,7 @@ export function NewInterview(){
  const [company,setCompany]=useState('');
  const [title,setTitle]=useState('');
  const [description,setDescription]=useState('');
- const [showPaste,setShowPaste]=useState(false);
+ const [importMethod,setImportMethod]=useState<'link'|'paste'|'extension'>('link');
  const [extracting,setExtracting]=useState(false);
  const [extractMessage,setExtractMessage]=useState('');
  useEffect(()=>{
@@ -24,7 +24,7 @@ export function NewInterview(){
     if(typeof data.url!=='string'||!data.url.startsWith('https://'))return;
     setDescription(data.description);
     setJobUrl(data.url.slice(0,2048));
-    setShowPaste(true);
+    setImportMethod('paste');
     setImportMessage('Job description received from extension. Extract company and role, then review before saving.');
    }catch{}
   }
@@ -51,9 +51,9 @@ export function NewInterview(){
    const response=await fetch('/api/interviews/import',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:jobUrl})});
    const data=await response.json();
    if(!response.ok)throw new Error(data.error||'Could not import the posting.');
-   setCompany(data.company_name);setTitle(data.role_title);setDescription(data.job_description);setShowPaste(false);
+   setCompany(data.company_name);setTitle(data.role_title);setDescription(data.job_description);setImportMethod('link');
    setImportMessage('Job details imported. Review and edit them before saving.');
-  }catch(e){setShowPaste(true);setImportMessage(e instanceof Error?e.message:'Could not import the posting. Paste the job description below.')}
+  }catch(e){setImportMethod('paste');setImportMessage(e instanceof Error?e.message:'Could not import the posting. Paste the job description below.')}
   finally{setImporting(false)}
  }
  async function submit(e:React.FormEvent<HTMLFormElement>){
@@ -68,33 +68,41 @@ export function NewInterview(){
   }catch(e){setError(e instanceof Error?e.message:'Could not save interview');setBusy(false)}
  }
  return <div className="new-interview">
+  <h2>Add an interview</h2>
   <div className="job-import">
-   <details className="extension-install-guide">
-    <summary>Import from LinkedIn or HiringCafe with Chrome extension</summary>
-    <p>One-time setup required.</p>
+   <div className="job-import-tabs" role="tablist" aria-label="Choose how to import a job">
+    <button type="button" role="tab" id="job-tab-link" aria-selected={importMethod==='link'} aria-controls="job-panel-link" onClick={()=>setImportMethod('link')}>Job link</button>
+    <button type="button" role="tab" id="job-tab-paste" aria-selected={importMethod==='paste'} aria-controls="job-panel-paste" onClick={()=>setImportMethod('paste')}>Paste description</button>
+    <button type="button" role="tab" id="job-tab-extension" aria-selected={importMethod==='extension'} aria-controls="job-panel-extension" onClick={()=>setImportMethod('extension')}>Chrome extension</button>
+   </div>
+   {importMethod==='link'&&<div role="tabpanel" id="job-panel-link" aria-labelledby="job-tab-link">
+    <p>Best for company career pages (no login needed). LinkedIn and Hiring Cafe block link imports. Use the Chrome extension instead.</p>
     
-    <ol>
-     <li><a href="https://github.com/ritusharma0212/interview-buddy/archive/refs/heads/feature/chrome-extension-job-import.zip" target="_blank" rel="noopener noreferrer">Download the extension ZIP</a> and unzip it.</li>
-     <li>Open <code>chrome://extensions</code>, enable Developer mode, and click Load unpacked.</li>
-     <li>Select the <code>extension</code> folder in the download.</li>
-     <li>Open a LinkedIn or HiringCafe job and click the extension to import.</li>
-    </ol>
+    <div className="job-import-row"><input id="job-posting-url" type="url" value={jobUrl} onChange={e=>setJobUrl(e.target.value)} placeholder="https://company.com/careers/job/..."/><button type="button" disabled={importing||!jobUrl.trim()} onClick={()=>void importJob()}>{importing?'Importing…':'Import job details'}</button></div>
+   </div>}
+   {importMethod==='paste'&&<div role="tabpanel" id="job-panel-paste" aria-labelledby="job-tab-paste">
+    <p>Works with any job. Copy the job description and paste it here.</p>
     
-   </details>
-   <label htmlFor="job-posting-url">Job posting URL (any public careers site)</label>
-   <div className="job-import-row"><input id="job-posting-url" type="url" value={jobUrl} onChange={e=>setJobUrl(e.target.value)} placeholder="https://company.com/careers/job/..." aria-describedby="job-import-note"/><button type="button" disabled={importing||!jobUrl.trim()} onClick={()=>void importJob()}>{importing?'Importing…':'Import job details'}</button></div>
-   <p id="job-import-note">We’ll try to fill in the company, job title, and description from a public job posting. You can also enter everything manually.</p>
-   {importMessage&&<p role="status" className="job-import-message">{importMessage}</p>}
-   <button type="button" onClick={()=>setShowPaste(v=>!v)}>{showPaste?'Hide paste option':'Paste job description manually'}</button>
-   {showPaste&&<div className="job-import">
-    <label htmlFor="pasted-job-description">Paste the complete job description</label>
     <textarea id="pasted-job-description" rows={8} maxLength={60000} value={description} onChange={e=>setDescription(e.target.value)} placeholder="Paste the job description here…"/>
     <button type="button" disabled={extracting||description.trim().length<20} onClick={()=>void extractPasted()}>{extracting?'Extracting…':'Extract company & role'}</button>
     {extractMessage&&<p role="status">{extractMessage}</p>}
    </div>}
+   {importMethod==='extension'&&<div role="tabpanel" id="job-panel-extension" aria-labelledby="job-tab-extension">
+    <p>Open a job on LinkedIn, Hiring Cafe or any job site, then click the extension to import it.</p>
+    <details className="extension-install-guide">
+     <summary>Install Chrome extension</summary>
+     <p>One-time setup required.</p>
+     <ol>
+      <li><a href="https://github.com/ritusharma0212/interview-buddy/archive/refs/heads/feature/chrome-extension-job-import.zip" target="_blank" rel="noopener noreferrer">Download the extension ZIP</a> and unzip it.</li>
+      <li>Open <code>chrome://extensions</code>, enable Developer mode, and click Load unpacked.</li>
+      <li>Select the <code>extension</code> folder in the download.</li>
+      <li>Open a job posting on LinkedIn, Hiring Cafe, or any other job site, then click the extension to import it.</li>
+     </ol>
+    </details>
+   </div>}
+   {importMessage&&<p role="status" className="job-import-message">{importMessage}</p>}
   </div>
   <form onSubmit={submit} style={{display:'grid',gap:10,maxWidth:650}}>
-   <h2>Add an interview</h2>
    <input name="company_name" placeholder="Company" required minLength={2} maxLength={160} value={company} onChange={e=>setCompany(e.target.value)}/>
    <input name="role_title" placeholder="Role title" required minLength={2} maxLength={200} value={title} onChange={e=>setTitle(e.target.value)}/>
    <label>Target seniority<select name="target_seniority" defaultValue="Auto-detect from role">{TARGET_SENIORITIES.map(level=><option key={level} value={level}>{level}</option>)}</select></label>
