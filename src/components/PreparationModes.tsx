@@ -11,7 +11,7 @@ import {seniorityLabel} from '@/lib/target-seniority';
 type Interview={id:string;company_name:string;role_title:string;interview_stage:string;target_seniority?:string;interview_at:string|null;job_description?:string|null;recruiter_instructions?:string|null};
 type MockSession={id:string;interview_id:string;status:string;started_at:string;assessment:{score?:number}|null};
 type InterviewStatus='Not started'|'In progress'|'Complete';
-export function PreparationModes({dashboard,practice,addInterview,interviews,mockSessions,mockStatuses,userId}:{dashboard:ReactNode;practice:ReactNode;addInterview:ReactNode;interviews:Interview[];mockSessions:MockSession[];mockStatuses:Record<string,InterviewStatus>;userId:string}){
+export function PreparationModes({dashboard,practice,addInterview,interviews,mockSessions,mockStatuses,userId,isGuest=false}:{dashboard:ReactNode;practice:ReactNode;addInterview:ReactNode;interviews:Interview[];mockSessions:MockSession[];mockStatuses:Record<string,InterviewStatus>;userId:string;isGuest?:boolean}){
  const router=useRouter();
  function tourNavigate(target:string){if(target==='add-interview'){setMode('dashboard');setShowAddInterview(true)}else{setMode(target as 'profile'|'practice'|'mock');setShowAddInterview(false)}}
  const [deletingId,setDeletingId]=useState<string|null>(null);
@@ -53,7 +53,7 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
      <button data-tour="practice" type="button" aria-pressed={mode==='practice'} onClick={()=>{setMode('practice');setShowAddInterview(false)}}>Question Practice</button>
      <button data-tour="profile" type="button" aria-pressed={mode==='profile'} onClick={()=>{setMode('profile');setShowAddInterview(false)}}>My Profile</button>
     </nav>
-    <div className="app-header-actions"><FeedbackWidget/><ThemeToggle/><form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form></div>
+    <div className="app-header-actions"><FeedbackWidget/><ThemeToggle/>{isGuest?<a href="/login">Sign In</a>:<form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form>}</div>
    </div>
   </header>
   <div className="app-shell">
