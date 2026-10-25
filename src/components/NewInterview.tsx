@@ -1,5 +1,5 @@
 'use client';
-import {useState} from 'react';
+import {useEffect,useState} from 'react';
 import {TARGET_SENIORITIES} from '@/lib/target-seniority';
 export function NewInterview(){
  const [error,setError]=useState('');
@@ -13,6 +13,26 @@ export function NewInterview(){
  const [showPaste,setShowPaste]=useState(false);
  const [extracting,setExtracting]=useState(false);
  const [extractMessage,setExtractMessage]=useState('');
+ useEffect(()=>{
+  function receive(){
+   const raw=sessionStorage.getItem('interview-breakthrough-extension-import');
+   if(!raw)return;
+   sessionStorage.removeItem('interview-breakthrough-extension-import');
+   try{
+    const data=JSON.parse(raw);
+    if(typeof data.description!=='string'||data.description.trim().length<20||data.description.length>60000)return;
+    if(typeof data.url!=='string'||!data.url.startsWith('https://'))return;
+    setDescription(data.description);
+    setJobUrl(data.url.slice(0,2048));
+    setShowPaste(true);
+    setImportMessage('Job description received from extension. Extract company and role, then review before saving.');
+   }catch{}
+  }
+  receive();
+  window.addEventListener('interview-breakthrough-extension-import',receive);
+  return ()=>window.removeEventListener('interview-breakthrough-extension-import',receive);
+ },[]);
+
  async function extractPasted(){
   setExtracting(true);setExtractMessage('');
   try{
@@ -48,7 +68,20 @@ export function NewInterview(){
   }catch(e){setError(e instanceof Error?e.message:'Could not save interview');setBusy(false)}
  }
  return <div className="new-interview">
-  <div className="job-import"><label htmlFor="job-posting-url">Job posting URL (any public careers site)</label>
+  <div className="job-import">
+   <details className="extension-install-guide">
+    <summary>Import from LinkedIn or HiringCafe with Chrome extension</summary>
+    <p>One-time setup required.</p>
+    
+    <ol>
+     <li><a href="https://github.com/ritusharma0212/interview-buddy/archive/refs/heads/feature/chrome-extension-job-import.zip" target="_blank" rel="noopener noreferrer">Download the extension ZIP</a> and unzip it.</li>
+     <li>Open <code>chrome://extensions</code>, enable Developer mode, and click Load unpacked.</li>
+     <li>Select the <code>extension</code> folder in the download.</li>
+     <li>Open a LinkedIn or HiringCafe job and click the extension to import.</li>
+    </ol>
+    
+   </details>
+   <label htmlFor="job-posting-url">Job posting URL (any public careers site)</label>
    <div className="job-import-row"><input id="job-posting-url" type="url" value={jobUrl} onChange={e=>setJobUrl(e.target.value)} placeholder="https://company.com/careers/job/..." aria-describedby="job-import-note"/><button type="button" disabled={importing||!jobUrl.trim()} onClick={()=>void importJob()}>{importing?'Importing…':'Import job details'}</button></div>
    <p id="job-import-note">We’ll try to fill in the company, job title, and description from a public job posting. You can also enter everything manually.</p>
    {importMessage&&<p role="status" className="job-import-message">{importMessage}</p>}

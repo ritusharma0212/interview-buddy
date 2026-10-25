@@ -52,6 +52,12 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
  }
  const [mode,setMode]=useState<'dashboard'|'practice'|'mock'|'profile'>('dashboard');
  const [showAddInterview,setShowAddInterview]=useState(false);
+ useEffect(()=>{
+  if(new URLSearchParams(window.location.search).get('import')!=='extension')return;
+  setMode('dashboard');setShowAddInterview(true);
+  window.history.replaceState(null,'',window.location.pathname);
+ },[]);
+
  const [newInterviewId,setNewInterviewId]=useState<string|null>(null);
  const choicesRef=useRef<HTMLElement|null>(null);
  const [focusInterviewId,setFocusInterviewId]=useState<string|null>(null);
