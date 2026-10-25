@@ -52,6 +52,25 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
  }
  const [mode,setMode]=useState<'dashboard'|'practice'|'mock'|'profile'>('dashboard');
  const [showAddInterview,setShowAddInterview]=useState(false);
+ // Only accept a user-initiated transfer from the window that opened this tab.
+ useEffect(()=>{
+  if(new URLSearchParams(window.location.search).get('import')!=='bookmarklet'||!window.opener)return;
+  const opener=window.opener;
+  const handle=(event:MessageEvent)=>{
+   if(event.source!==opener||!event.data||event.data.type!=='INTERVIEW_BREAKTHROUGH_JOB')return;
+   const {description,url}=event.data as {description?:unknown;url?:unknown};
+   if(typeof description!=='string'||description.trim().length<20||description.length>60000)return;
+   if(typeof url!=='string'||!/^https:\/\//i.test(url)||url.length>2048)return;
+   // A sender can transfer only data, never commands or authentication.
+   try{sessionStorage.setItem('interview-breakthrough-job-import',JSON.stringify({description,url}));}catch{return}
+   setMode('dashboard');setShowAddInterview(true);
+   window.history.replaceState(null,'',window.location.pathname);
+   window.dispatchEvent(new Event('interview-breakthrough-import'));
+  };
+  window.addEventListener('message',handle);
+  opener.postMessage({type:'INTERVIEW_BREAKTHROUGH_READY'},'*');
+  return ()=>window.removeEventListener('message',handle);
+ },[]);
  const [newInterviewId,setNewInterviewId]=useState<string|null>(null);
  const choicesRef=useRef<HTMLElement|null>(null);
  const [focusInterviewId,setFocusInterviewId]=useState<string|null>(null);
