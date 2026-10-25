@@ -58,7 +58,7 @@ export function NewInterview(){
     <textarea id="pasted-job-description" rows={8} maxLength={60000} value={description} onChange={e=>setDescription(e.target.value)} placeholder="Paste the job description here…"/>
     <button type="button" disabled={extracting||description.trim().length<20} onClick={()=>void extractPasted()}>{extracting?'Extracting…':'Extract company & role'}</button>
     {extractMessage&&<p role="status">{extractMessage}</p>}
-   </div>
+   </div>}
   </div>
   <form onSubmit={submit} style={{display:'grid',gap:10,maxWidth:650}}>
    <h2>Add an interview</h2>
