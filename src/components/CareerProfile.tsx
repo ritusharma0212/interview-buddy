@@ -4,7 +4,7 @@ import {useEffect,useRef,useState} from 'react';
 function normalizeProfileText(value:string){
  return value.replace(/\\\\r\\\\n|\\\\n|\\\\r/g,'\n').replace(/\\r\\n/g,'\n');
 }
-export function CareerProfile(){
+export function CareerProfile({onSaved}:{onSaved?:()=>void}={}){
  const [text,setText]=useState('');
  const [url,setUrl]=useState('');
  const pdfInput=useRef<HTMLInputElement>(null);
@@ -40,6 +40,7 @@ export function CareerProfile(){
    const d=await r.json();
    if(!r.ok)throw Error(d.error||'Could not save');
    setSaved(true);setMessage('Profile saved. Future AI feedback and mock assessments can use your projects.');
+   onSaved?.();
   }catch(e){setMessage(e instanceof Error?e.message:'Could not save')}
   finally{setWorking(false)}
  }
