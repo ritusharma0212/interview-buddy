@@ -71,15 +71,15 @@ export function NewInterview(){
   <div className="job-import">
    <details className="extension-install-guide">
     <summary>Import from LinkedIn or HiringCafe with Chrome extension</summary>
-    <p>Import job descriptions directly from job postings. One-time setup required.</p>
-    <p><strong>Testing version:</strong> The extension is not yet in the Chrome Web Store.</p>
+    <p>One-time setup required.</p>
+    
     <ol>
      <li><a href="https://github.com/ritusharma0212/interview-buddy/archive/refs/heads/feature/chrome-extension-job-import.zip" target="_blank" rel="noopener noreferrer">Download the extension ZIP</a> and unzip it.</li>
      <li>Open <code>chrome://extensions</code>, enable Developer mode, and click Load unpacked.</li>
      <li>Select the <code>extension</code> folder in the download.</li>
      <li>Open a LinkedIn or HiringCafe job and click the extension to import.</li>
     </ol>
-    <p>For preview testing, enter this preview site's base URL in the extension popup. Existing job URL import and manual paste remain available.</p>
+    
    </details>
    <label htmlFor="job-posting-url">Job posting URL (any public careers site)</label>
    <div className="job-import-row"><input id="job-posting-url" type="url" value={jobUrl} onChange={e=>setJobUrl(e.target.value)} placeholder="https://company.com/careers/job/..." aria-describedby="job-import-note"/><button type="button" disabled={importing||!jobUrl.trim()} onClick={()=>void importJob()}>{importing?'Importing…':'Import job details'}</button></div>
