@@ -340,3 +340,14 @@ html[data-theme="dark"] .job-import-tabs button:hover:not(:disabled),
 html[data-theme="dark"] .job-import-row button:hover:not(:disabled),
 html[data-theme="dark"] button.extract-company-role-button:hover:not(:disabled){background:#244b89!important;color:#fff!important;border-color:#244b89!important}
 html[data-theme="dark"] button.extract-company-role-button:disabled{opacity:.55}
+
+/* Explicitly override the global dark-theme button reset for all New Interview actions. */
+html[data-theme="dark"] .new-interview .job-import-row button,
+html[data-theme="dark"] .new-interview button.extract-company-role-button,
+html[data-theme="dark"] .new-interview form > button:last-of-type{background:#315fa8!important;border-color:#315fa8!important;color:#fff!important}
+html[data-theme="dark"] .new-interview .job-import-row button:hover:not(:disabled),
+html[data-theme="dark"] .new-interview button.extract-company-role-button:hover:not(:disabled),
+html[data-theme="dark"] .new-interview form > button:last-of-type:hover:not(:disabled){background:#244b89!important;border-color:#244b89!important;color:#fff!important}
+html[data-theme="dark"] .new-interview .job-import-row button:disabled,
+html[data-theme="dark"] .new-interview button.extract-company-role-button:disabled,
+html[data-theme="dark"] .new-interview form > button:last-of-type:disabled{opacity:.55;cursor:not-allowed}
