@@ -317,3 +317,11 @@ html[data-theme="dark"] .app-brand img.app-brand-mark{background:transparent}
 .job-import p{font-size:.84rem;color:var(--muted);margin:8px 0 0}
 .job-import .job-import-message{color:var(--ink)}
 @media(max-width:640px){.job-import-row{flex-direction:column}.job-import-row button{width:100%}}
+
+/* Active import method uses the same blue as Save interview. */
+.job-import-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:12px 0;padding:4px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}
+.job-import-tabs button{min-width:0;padding:11px 8px;background:var(--primary);color:#fff;border:1px solid var(--primary);border-radius:9px;font-weight:650;white-space:normal}
+.job-import-tabs button:hover:not(:disabled){background:var(--primary-dark);color:#fff}
+.job-import-tabs button[aria-selected="true"]{background:var(--primary-dark);color:#fff;box-shadow:inset 0 0 0 2px #ffffff99}
+.job-import-tabs button:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
+@media(max-width:480px){.job-import-tabs button{font-size:.78rem;padding:9px 4px}}
