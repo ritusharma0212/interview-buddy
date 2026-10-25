@@ -1,5 +1,9 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
+// Normalize escaped line breaks from imported or previously saved profile text.
+function normalizeProfileText(value:string){
+ return value.replace(/\\\\r\\\\n|\\\\n|\\\\r/g,'\n').replace(/\\r\\n/g,'\n');
+}
 export function CareerProfile(){
  const [text,setText]=useState('');
  const [url,setUrl]=useState('');
@@ -10,7 +14,7 @@ export function CareerProfile(){
  const [saved,setSaved]=useState(false);
  useEffect(()=>{
   let live=true;
-  fetch('/api/profile').then(async r=>{const d=await r.json();if(!r.ok)throw Error(d.error);if(live){setText((d.profile?.profile_text??'').replace(/\\n/g,'\n'));setUrl(d.profile?.source_url??'');setSaved(Boolean(d.profile?.profile_text));}})
+  fetch('/api/profile').then(async r=>{const d=await r.json();if(!r.ok)throw Error(d.error);if(live){setText(normalizeProfileText(d.profile?.profile_text??''));setUrl(d.profile?.source_url??'');setSaved(Boolean(d.profile?.profile_text));}})
    .catch(e=>{if(live)setMessage(e.message||'Could not load profile')}).finally(()=>{if(live)setLoading(false)});
   return ()=>{live=false};
  },[]);
@@ -24,7 +28,7 @@ export function CareerProfile(){
    const d=await r.json();
    if(!r.ok)throw Error(d.error||'Import failed');
    if(text.trim()&&!window.confirm('Replace the current editor text with the imported draft? Unsaved edits will be lost.'))return;
-   setText(d.profile_text.replace(/\\n/g,'\n'));setSaved(false);
+   setText(normalizeProfileText(d.profile_text));setSaved(false);
    setMessage('Draft imported. Review and edit the details, then click Save profile.');
   }catch(e){setMessage(e instanceof Error?e.message:'Import failed')}
   finally{setWorking(false)}
@@ -57,7 +61,7 @@ export function CareerProfile(){
    </div>
   </div>
   <label htmlFor="profile-editor">Your career profile — review and edit before saving</label>
-  <textarea id="profile-editor" rows={18} maxLength={30000} value={text} onChange={e=>{setText(e.target.value);setSaved(false)}} placeholder="Summary\n\nExperience\n\nProjects and achievements\n\nSkills"/>
+  <textarea id="profile-editor" rows={18} maxLength={30000} value={text} onChange={e=>{setText(e.target.value);setSaved(false)}} placeholder={['Summary', '', 'Experience', '', 'Projects and achievements', '', 'Skills'].join(String.fromCharCode(10))}/>
   <div className="career-profile-actions"><button type="button" onClick={save} disabled={working||loading}>{working?'Working…':'Save profile'}</button><span>{saved?'Saved profile':'Unsaved changes'}</span></div>
   {loading&&<p>Loading profile…</p>}
   {message&&<p role="status">{message}</p>}

@@ -8,11 +8,38 @@ import {ThemeToggle} from './ThemeToggle';
 import {FeedbackWidget} from './FeedbackWidget';
 import {GuidedTour} from './GuidedTour';
 import {seniorityLabel} from '@/lib/target-seniority';
+import {browserSupabase} from '@/lib/supabase/browser';
 type Interview={id:string;company_name:string;role_title:string;interview_stage:string;target_seniority?:string;interview_at:string|null;job_description?:string|null;recruiter_instructions?:string|null};
 type MockSession={id:string;interview_id:string;status:string;started_at:string;assessment:{score?:number}|null};
 type InterviewStatus='Not started'|'In progress'|'Complete';
 export function PreparationModes({dashboard,practice,addInterview,interviews,mockSessions,mockStatuses,userId,isGuest=false}:{dashboard:ReactNode;practice:ReactNode;addInterview:ReactNode;interviews:Interview[];mockSessions:MockSession[];mockStatuses:Record<string,InterviewStatus>;userId:string;isGuest?:boolean}){
  const router=useRouter();
+ const [showUpgrade,setShowUpgrade]=useState(false);
+ const [upgradeEmail,setUpgradeEmail]=useState('');
+ const [upgradePassword,setUpgradePassword]=useState('');
+ const [upgradeBusy,setUpgradeBusy]=useState(false);
+ const [upgradeMessage,setUpgradeMessage]=useState('');
+ const [upgradeSent,setUpgradeSent]=useState(false);
+ async function upgradeGuest(event:React.FormEvent<HTMLFormElement>){
+  event.preventDefault();
+  if(upgradePassword.length<8){setUpgradeMessage('Use at least 8 characters for your password.');return}
+  setUpgradeBusy(true);setUpgradeMessage('');
+  const db=browserSupabase();
+  const {data:{user},error:authError}=await db.auth.getUser();
+  if(authError||!user?.is_anonymous){
+   setUpgradeMessage('Guest session not found. Refresh and try again without signing out.');
+   setUpgradeBusy(false);return;
+  }
+  // Update the existing identity rather than signing up a second user.
+  const {error}=await db.auth.updateUser(
+   {email:upgradeEmail.trim(),password:upgradePassword},
+   {emailRedirectTo:window.location.origin+'/auth/callback'}
+  );
+  setUpgradeBusy(false);
+  if(error){setUpgradeMessage(error.message);return}
+  setUpgradePassword('');setUpgradeSent(true);
+  setUpgradeMessage('Check your email for the verification link. Your guest work remains saved on this device. After verification, you can sign in with your email and password.');
+ }
  function tourNavigate(target:string){if(target==='add-interview'){setMode('dashboard');setShowAddInterview(true)}else{setMode(target as 'profile'|'practice'|'mock');setShowAddInterview(false)}}
  const [deletingId,setDeletingId]=useState<string|null>(null);
  const [confirmDeleteId,setConfirmDeleteId]=useState<string|null>(null);
@@ -53,9 +80,23 @@ export function PreparationModes({dashboard,practice,addInterview,interviews,moc
      <button data-tour="practice" type="button" aria-pressed={mode==='practice'} onClick={()=>{setMode('practice');setShowAddInterview(false)}}>Question Practice</button>
      <button data-tour="profile" type="button" aria-pressed={mode==='profile'} onClick={()=>{setMode('profile');setShowAddInterview(false)}}>My Profile</button>
     </nav>
-    <div className="app-header-actions"><FeedbackWidget/><ThemeToggle/>{isGuest?<a href="/login">Sign In</a>:<form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form>}</div>
+    <div className="app-header-actions"><FeedbackWidget/><ThemeToggle/>{isGuest?<><button type="button" onClick={()=>{setShowUpgrade(true);setUpgradeSent(false);setUpgradeMessage('')}}>Save my progress</button><a href="/login">Sign In</a></>:<form className="app-signout" action="/api/auth/signout" method="post"><button>Sign out</button></form>}</div>
    </div>
   </header>
+  {isGuest&&showUpgrade&&<div className="feedback-overlay" onMouseDown={event=>{if(event.target===event.currentTarget)setShowUpgrade(false)}}>
+   <div className="feedback-dialog" role="dialog" aria-modal="true" aria-label="Save your guest progress">
+    <div className="feedback-heading"><h2>Save your progress</h2><button type="button" aria-label="Close" onClick={()=>setShowUpgrade(false)}>✕</button></div>
+    <p>Link an email and password to this guest profile. Your interviews and practice history will stay with this account.</p>
+    {upgradeSent?<><p role="status">{upgradeMessage}</p><button type="button" onClick={()=>setShowUpgrade(false)}>Done</button></>:
+    <form className="feedback-form" onSubmit={upgradeGuest}>
+     <label>Email<input type="email" autoComplete="email" required value={upgradeEmail} onChange={e=>setUpgradeEmail(e.target.value)}/></label>
+     <label>Password (at least 8 characters)<input type="password" autoComplete="new-password" minLength={8} required value={upgradePassword} onChange={e=>setUpgradePassword(e.target.value)}/></label>
+     <p>Already have an account? Use Sign In instead. Existing account data is not merged with guest data.</p>
+     {upgradeMessage&&<p role="alert">{upgradeMessage}</p>}
+     <div className="feedback-actions"><button type="button" onClick={()=>setShowUpgrade(false)}>Cancel</button><button type="submit" disabled={upgradeBusy}>{upgradeBusy?'Saving…':'Link email and save'}</button></div>
+    </form>}
+   </div>
+  </div>}
   <div className="app-shell">
    {newInterviewId&&<section ref={choicesRef} tabIndex={-1} className="post-create-choices" aria-labelledby="post-create-title">
     <div className="post-create-eyebrow">Interview created successfully</div>
