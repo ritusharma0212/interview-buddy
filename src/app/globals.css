@@ -330,3 +330,13 @@ html[data-theme="dark"] .app-brand img.app-brand-mark{background:transparent}
 button.extract-company-role-button{background:var(--primary);border-color:var(--primary);color:#fff}
 button.extract-company-role-button:hover:not(:disabled){background:var(--primary-dark);border-color:var(--primary-dark);color:#fff}
 button.extract-company-role-button:disabled{background:var(--primary);border-color:var(--primary);color:#fff;opacity:.55;cursor:not-allowed}
+
+/* Keep Add Interview primary actions blue in both themes. Override the generic dark-mode button reset. */
+html[data-theme="dark"] .job-import-tabs button:not([aria-pressed="true"]):not([type="submit"]),
+html[data-theme="dark"] .job-import-row button:not([type="submit"]),
+html[data-theme="dark"] button.extract-company-role-button:not([type="submit"]){background:#315fa8;color:#fff;border-color:#315fa8}
+html[data-theme="dark"] .job-import-tabs button[aria-selected="true"]{background:#244b89!important;color:#fff!important;border-color:#315fa8!important}
+html[data-theme="dark"] .job-import-tabs button:hover:not(:disabled),
+html[data-theme="dark"] .job-import-row button:hover:not(:disabled),
+html[data-theme="dark"] button.extract-company-role-button:hover:not(:disabled){background:#244b89!important;color:#fff!important;border-color:#244b89!important}
+html[data-theme="dark"] button.extract-company-role-button:disabled{opacity:.55}
