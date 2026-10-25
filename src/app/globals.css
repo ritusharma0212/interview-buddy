@@ -354,3 +354,11 @@ html[data-theme="dark"] .new-interview form > button:last-of-type:disabled{opaci
 
 /* Compact beta marker for the extension import tab. */
 .job-import-tabs .extension-beta-label{display:inline-block;margin-left:5px;padding:2px 5px;border-radius:4px;font-size:10px;line-height:1.2;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.2);color:#fff;vertical-align:middle}
+
+/* Optional profile reminder after interview creation; retains the two preparation choices. */
+.post-create-profile-reminder{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}
+.post-create-profile-reminder strong{display:block;color:var(--ink)}
+.post-create-profile-reminder p{margin:5px 0 10px;color:var(--muted);font-size:.91rem}
+.post-create-profile-reminder button{background:var(--primary);border-color:var(--primary);color:#fff;padding:8px 13px}
+.post-create-profile-reminder button:hover:not(:disabled){background:var(--primary-dark);color:#fff}
+html[data-theme="dark"] .post-create-profile-reminder button{background:#3c70bf!important;border-color:#3c70bf!important;color:#fff!important}
