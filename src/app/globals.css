@@ -351,3 +351,6 @@ html[data-theme="dark"] .new-interview form > button:last-of-type:hover:not(:dis
 html[data-theme="dark"] .new-interview .job-import-row button:disabled,
 html[data-theme="dark"] .new-interview button.extract-company-role-button:disabled,
 html[data-theme="dark"] .new-interview form > button:last-of-type:disabled{opacity:.55;cursor:not-allowed}
+
+/* Compact beta marker for the extension import tab. */
+.job-import-tabs .extension-beta-label{display:inline-block;margin-left:5px;padding:2px 5px;border-radius:4px;font-size:10px;line-height:1.2;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.2);color:#fff;vertical-align:middle}
