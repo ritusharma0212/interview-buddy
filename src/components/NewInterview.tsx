@@ -73,7 +73,7 @@ export function NewInterview(){
    <div className="job-import-tabs" role="tablist" aria-label="Choose how to import a job">
     <button type="button" role="tab" id="job-tab-link" aria-selected={importMethod==='link'} aria-controls="job-panel-link" onClick={()=>setImportMethod('link')}>Job link</button>
     <button type="button" role="tab" id="job-tab-paste" aria-selected={importMethod==='paste'} aria-controls="job-panel-paste" onClick={()=>setImportMethod('paste')}>Paste description</button>
-    <button type="button" role="tab" id="job-tab-extension" aria-selected={importMethod==='extension'} aria-controls="job-panel-extension" onClick={()=>setImportMethod('extension')}>Chrome extension</button>
+    <button type="button" role="tab" id="job-tab-extension" aria-selected={importMethod==='extension'} aria-controls="job-panel-extension" onClick={()=>setImportMethod('extension')}>Chrome extension <span className="extension-beta-label">BETA</span></button>
    </div>
    {importMethod==='link'&&<div role="tabpanel" id="job-panel-link" aria-labelledby="job-tab-link">
     <p>Best for company career pages (no login needed). LinkedIn and Hiring Cafe block link imports. Use the Chrome extension instead.</p>
@@ -105,7 +105,7 @@ export function NewInterview(){
   <form onSubmit={submit} style={{display:'grid',gap:10,maxWidth:650}}>
    <input name="company_name" placeholder="Company" required minLength={2} maxLength={160} value={company} onChange={e=>setCompany(e.target.value)}/>
    <input name="role_title" placeholder="Role title" required minLength={2} maxLength={200} value={title} onChange={e=>setTitle(e.target.value)}/>
-   <label>Target seniority<select name="target_seniority" defaultValue="Auto-detect from role">{TARGET_SENIORITIES.map(level=><option key={level} value={level}>{level}</option>)}</select></label>
+   <label>Target seniority<select name="target_seniority" defaultValue="" required><option value="" disabled>Select seniority</option>{TARGET_SENIORITIES.filter(level=>level!=='Auto-detect from role').map(level=><option key={level} value={level}>{level}</option>)}</select></label>
    <select name="interview_stage" aria-label="Interview type"><option>Recruiter screen</option><option>Hiring manager</option><option>Product sense</option><option>Product execution</option><option>Product strategy</option><option>Behavioral</option><option>Other</option></select>
    <textarea name="job_description" placeholder="Paste the actual job description" required minLength={20} maxLength={60000} rows={6} value={description} onChange={e=>setDescription(e.target.value)}/>
    <textarea name="recruiter_instructions" placeholder="Recruiter instructions (optional)" rows={3}/>
