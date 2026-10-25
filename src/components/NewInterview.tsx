@@ -77,12 +77,12 @@ export function NewInterview(){
    </div>
    {importMethod==='link'&&<div role="tabpanel" id="job-panel-link" aria-labelledby="job-tab-link">
     <p>Best for company career pages (no login needed). LinkedIn and Hiring Cafe block link imports. Use the Chrome extension instead.</p>
-    <label htmlFor="job-posting-url">Job posting URL (any public careers site)</label>
+    
     <div className="job-import-row"><input id="job-posting-url" type="url" value={jobUrl} onChange={e=>setJobUrl(e.target.value)} placeholder="https://company.com/careers/job/..."/><button type="button" disabled={importing||!jobUrl.trim()} onClick={()=>void importJob()}>{importing?'Importing…':'Import job details'}</button></div>
    </div>}
    {importMethod==='paste'&&<div role="tabpanel" id="job-panel-paste" aria-labelledby="job-tab-paste">
     <p>Works with any job. Copy the job description and paste it here.</p>
-    <label htmlFor="pasted-job-description">Paste the complete job description</label>
+    
     <textarea id="pasted-job-description" rows={8} maxLength={60000} value={description} onChange={e=>setDescription(e.target.value)} placeholder="Paste the job description here…"/>
     <button type="button" disabled={extracting||description.trim().length<20} onClick={()=>void extractPasted()}>{extracting?'Extracting…':'Extract company & role'}</button>
     {extractMessage&&<p role="status">{extractMessage}</p>}
