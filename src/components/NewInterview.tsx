@@ -70,21 +70,22 @@ export function NewInterview(){
  return <div className="new-interview">
   <div className="job-import">
    <details className="extension-install-guide">
-    <summary>Import from LinkedIn or HiringCafe with Chrome extension</summary>
+    <summary>For Private sites like LikedIn or HiringCafe Import jobs using Chrome extension</summary>
     <p>One-time setup required.</p>
     
     <ol>
      <li><a href="https://github.com/ritusharma0212/interview-buddy/archive/refs/heads/feature/chrome-extension-job-import.zip" target="_blank" rel="noopener noreferrer">Download the extension ZIP</a> and unzip it.</li>
      <li>Open <code>chrome://extensions</code>, enable Developer mode, and click Load unpacked.</li>
      <li>Select the <code>extension</code> folder in the download.</li>
-     <li>Open a LinkedIn or HiringCafe job and click the extension to import.</li>
+     <li>Open a job posting on LinkedIn, Hiring Cafe, or any other job site, then click the extension to import it.</li>
     </ol>
     
    </details>
+   <p className="job-import-or">OR</p>
    <label htmlFor="job-posting-url">Job posting URL (any public careers site)</label>
    <div className="job-import-row"><input id="job-posting-url" type="url" value={jobUrl} onChange={e=>setJobUrl(e.target.value)} placeholder="https://company.com/careers/job/..." aria-describedby="job-import-note"/><button type="button" disabled={importing||!jobUrl.trim()} onClick={()=>void importJob()}>{importing?'Importing…':'Import job details'}</button></div>
-   <p id="job-import-note">We’ll try to fill in the company, job title, and description from a public job posting. You can also enter everything manually.</p>
    {importMessage&&<p role="status" className="job-import-message">{importMessage}</p>}
+   <p className="job-import-or">OR</p>
    <button type="button" onClick={()=>setShowPaste(v=>!v)}>{showPaste?'Hide paste option':'Paste job description manually'}</button>
    {showPaste&&<div className="job-import">
     <label htmlFor="pasted-job-description">Paste the complete job description</label>
