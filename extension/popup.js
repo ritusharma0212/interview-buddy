@@ -21,19 +21,10 @@ button.addEventListener('click',async()=>{
   if(!job||job.description.length<20)throw Error('Select the job description on the page and try again.');
   if(!confirm('Send '+job.description.length+' characters of job text to Interview Breakthrough?')){status.textContent='Cancelled.';return}
   await chrome.storage.local.set({appUrl:app.origin});
-  const destination=await chrome.tabs.create({url:app.origin+'/dashboard?import=extension'});
-  const listener=async(id,change)=>{
-   if(id!==destination.id||change.status!=='complete')return;
-   chrome.tabs.onUpdated.removeListener(listener);
-   try{
-    await chrome.scripting.executeScript({target:{tabId:id},world:'MAIN',func:data=>{
-     sessionStorage.setItem('interview-breakthrough-extension-import',JSON.stringify(data));
-     window.dispatchEvent(new Event('interview-breakthrough-extension-import'));
-    },args:[job]});
-    status.textContent='Transferred. Review the job in the new tab.';
-   }catch(e){status.textContent='Transfer failed: '+e.message}
-  };
-  chrome.tabs.onUpdated.addListener(listener);
+  status.textContent='Transferring job to Interview Breakthrough…';
+  const response=await chrome.runtime.sendMessage({type:'IMPORT_JOB',origin:app.origin,job});
+  if(!response?.ok)throw Error(response?.error||'Transfer failed.');
+  status.textContent='Transferred. Review the new tab.';
  }catch(e){status.textContent=e.message||'Import failed.'}
  finally{button.disabled=false}
 });
